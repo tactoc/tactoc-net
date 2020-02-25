@@ -30,7 +30,9 @@
     <nav class="navbar navbar-expand navbar-dark">
       <div class="navbar-nav ">
         <a class="navbar-brand" style="color: #F25F5C;"  href="{{ url_for('main.index') }}">tactoc</a>
-        <a class="nav-item nav-link active" href="{{ url_for('main.projects') }}">Projects</a>
+        <!--
+          <a class="nav-item nav-link active" href="{{ url_for('main.projects') }}">Projects</a>
+        -->
         <a class="nav-item nav-link active" href="{{ url_for('main.contact') }}">Contact</a>
         
         {% if current_user.is_authenticated %}
