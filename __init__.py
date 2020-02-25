@@ -10,8 +10,8 @@ app.config['SECRET_KEY'] = 'MZvKzJmUl8gN6z5jptAO'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 * 1024 # 5 gb max
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['CLOUD_FOLDER'] = 'cloud'
+app.config['UPLOAD_FOLDER'] = '/media/tactoc-net/uploads'
+app.config['CLOUD_FOLDER'] = '/media/tactoc-net/cloud'
 
 db.init_app(app)
 

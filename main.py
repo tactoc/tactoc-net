@@ -14,7 +14,7 @@ def test():
 
 @main.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("main.cloud"))
 
 @main.route("/projects")
 def projects():
@@ -231,7 +231,7 @@ def cloud():
             path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
             if not os.path.exists(path):
                 os.mkdir(path)
-                flash("Created ", value")
+                flash("Created ", value)
                 user_cloud.files = user_cloud.get_files()
 
         if "file_upload" in request.files:
