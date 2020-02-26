@@ -36,7 +36,7 @@
                         <div class="popup" id="popupfolder">
                             <form action="/cloud" method="POST">
                                 <div>
-                                    <input maxlength="12" type="text" class="cloudmanuel popupfoldertext" id="newfoldername" name="newfoldername" placeholder="New Folder Name">
+                                    <input type="text" class="cloudmanuel popupfoldertext" id="newfoldername" name="newfoldername" placeholder="New Folder Name">
                                 </div>
                                 <input type="submit" id="submitfolder" style=" visibility: hidden; background: none; border: none; cursor: pointer; font-size: 0px;">
                             </form>
@@ -108,12 +108,12 @@
                         <div>
                             <a style="color: inherit;color: #F25F5C;" target="_blank"  href="/{{ user_cloud.download_file(i) }}" class="clouditem float-left">{{ user_cloud.parse_filename(i,1) }}</a>
                             
-                            <div class="float-right" onclick="deleteItem('{{ i }}')">
+                            <div class="float-right" onclick="deleteItem('{{ i }}');" >
                                 <div class="edit-file-icon">
                                     <img src="/static/icons/delete.svg" />
                                 </div>
                             </div>
-                            <div class="float-right" onclick="editItem('{{ i }}')">
+                            <div class="float-right" onclick="editItem('{{ i }}');">
                                     <div class="edit-file-icon">
                                         <img src="/static/icons/edit.svg" />
                                     </div>
