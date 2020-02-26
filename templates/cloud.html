@@ -45,11 +45,23 @@
                     <form action="/cloud" method="POST" enctype="multipart/form-data">
                         <div>
                             <label class="cloudmanuel customchoosefile">
-                                <input  id="file_upload" type="file" name="file_upload" onchange="fileuploaded()">
-                                Choose File
+                                <input multiple id="file_upload" type="file" name="file_upload" onchange="fileuploaded()">
+                                Choose File(s)
                             </label>
                         </div>
                         <input type="submit" id="submitfile" style="visibility: hidden; background: none; border: none; cursor: pointer; font-size: 0px;">
+                    </form>
+                </div>
+
+                <div class="popup" id="popupfolders">
+                    <form action="/cloud" method="POST" enctype="multipart/form-data">
+                        <div>
+                            <label class="cloudmanuel customchoosefile">
+                                <input  webkitdirectory multiple id="folders_upload" type="file" name="folders_upload" onchange="foldersuploaded()">
+                                Choose Folder(s)
+                            </label>
+                        </div>
+                        <input type="submit" id="submitfolders" style="visibility: hidden; background: none; border: none; cursor: pointer; font-size: 0px;">
                     </form>
                 </div>
 
@@ -62,11 +74,30 @@
             <div class="files">
                 {% if user_cloud.has_files() %}
                     {% for i in user_cloud.files[0][1]: %}
-                    <div>
+                        <div>
+                            <form action="/cloud" method="POST">
+                                <input style="color: #1F2833;" type="submit" name="change_folder" value="{{ user_cloud.parse_filename(i,0) }}" class="clouditem astext float-left"></input>
+                            
+                                <div class="float-right" onclick="deleteItem('{{ i }}')">
+                                    <div class="edit-file-icon">
+                                        <img src="/static/icons/delete.svg" />
+                                    </div>
+                                </div>
+                                <div class="float-right" onclick="editItem('{{ i }}')">
+                                        <div class="edit-file-icon">
+                                            <img src="/static/icons/edit.svg" />
+                                        </div>
+                                </div>
+                                
+                            <p  class="bytes-animation float-right">{{ user_cloud.get_size(i) }}</p>
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endfor %}
 
-                        <form action="/cloud" method="POST">
-                            <input style="color: #1F2833;" type="submit" name="change_folder" value="{{ user_cloud.parse_filename(i,0) }}" class="clouditem astext float-left"></input>
-                           
+                    {% for i in user_cloud.files[0][2]: %}
+                        <div>
+                            <a style="color: inherit;color: #F25F5C;" target="_blank"  href="/{{ user_cloud.download_file(i) }}" class="clouditem float-left">{{ user_cloud.parse_filename(i,1) }}</a>
+                            
                             <div class="float-right" onclick="deleteItem('{{ i }}')">
                                 <div class="edit-file-icon">
                                     <img src="/static/icons/delete.svg" />
@@ -77,33 +108,10 @@
                                         <img src="/static/icons/edit.svg" />
                                     </div>
                             </div>
+                            <p  class="bytes-animation float-right">{{ user_cloud.get_size(i) }}</p>
                             
-                        <p  class="bytes-animation float-right">{{ user_cloud.get_size(i) }}</p>
-                        <div class="clearfix"></div>
-                        <form method="POST" action="/cloud">
-                        
-                        </form>
-                    </div>
-                    {% endfor %}
-
-                    {% for i in user_cloud.files[0][2]: %}
-                    <div>
-                        <a style="color: inherit;color: #F25F5C;" target="_blank"  href="/{{ user_cloud.download_file(i) }}" class="clouditem float-left">{{ user_cloud.parse_filename(i,1) }}</a>
-                        
-                        <div class="float-right" onclick="deleteItem('{{ i }}')">
-                            <div class="edit-file-icon">
-                                <img src="/static/icons/delete.svg" />
-                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="float-right" onclick="editItem('{{ i }}')">
-                                <div class="edit-file-icon">
-                                    <img src="/static/icons/edit.svg" />
-                                </div>
-                        </div>
-                        
-                        <p  class="bytes-animation float-right">{{ user_cloud.get_size(i) }}</p>
-                        <div class="clearfix"></div>
-                    </div>
                     {% endfor %}
                 {% else %}
                     <p>There is no files in {{ user_cloud.get_folder() }}</p>
@@ -114,11 +122,11 @@
 
     
                 {% if SELECTED_FOLDER|length > 1: %}
-                <div class="custom-file-upload">
-                    <form action="/cloud" method="POST">
-                        <input style="width: 2em; height: 2em;" type="image" src="/static/icons/go_back.svg" alt="submit" name="back"  value="back"></input>
-                    </form>
-                </div>
+                    <div class="custom-file-upload">
+                        <form action="/cloud" method="POST">
+                            <input style="width: 2em; height: 2em;" type="image" src="/static/icons/go_back.svg" alt="submit" name="back"  value="back"></input>
+                        </form>
+                    </div>
                 {% endif %}
                 
                 {% with messages = get_flashed_messages() %}
@@ -143,7 +151,8 @@
         function folderpopup(){
             i = document.getElementById('popupfolder');
             y = document.getElementById('popupfile');
-            if (getComputedStyle(y, null).display == 'none'){
+            yy = document.getElementById('popupfolders');
+            if (getComputedStyle(y, null).display == 'none' || getComputedStyle(yy, null).display == 'none'){
                 display = getComputedStyle(i, null).display;
                 if (display == 'none'){
                     i.style.display = 'block';
@@ -153,28 +162,9 @@
             }else{
                 i.style.display = 'block';
                 y.style.display = 'none';
+                yy.style.display = 'none';
             }
         }
-        function filepopup(){
-            i = document.getElementById('popupfile');
-            y = document.getElementById('popupfolder');
-            if (getComputedStyle(y, null).display == 'none'){
-                display = getComputedStyle(i, null).display;
-                if (display == 'none'){
-                    i.style.display = 'block';
-                } else {
-                    i.style.display = 'none';
-                }
-            } else{
-                i.style.display = 'block';
-                y.style.display = 'none';
-            }
-        }
-        function fileuploaded(){
-            document.getElementById('submitfile').click()
-        }
-
-
         // Get the input field
         var input = document.getElementById("newfoldername");
 
@@ -189,28 +179,54 @@
         }
         });
 
+        function filepopup(){
+            i = document.getElementById('popupfile');
+            ii = document.getElementById('popupfolders');
+            y = document.getElementById('popupfolder');
+            if (getComputedStyle(y, null).display == 'none'){
+                display = getComputedStyle(i, null).display;
+                if (display == 'none'){
+                    i.style.display = 'block';
+                    ii.style.display = 'block';
+                } else {
+                    i.style.display = 'none';
+                    ii.style.display = 'none';
+                }
+            } else{
+                i.style.display = 'block';
+                ii.style.display = 'block';
+                y.style.display = 'none';
+            }
+        }
+        function fileuploaded(){
+            document.getElementById('submitfile').click()
+        }
+        function foldersuploaded(){
+            document.getElementById('submitfolders').click()
+        }
+
+
+
+
         function deleteItem(i){
             let y = document.getElementById('delete_button')
+            console.log(y)
             y.value = i;
             let x = confirm('Delete ' + i + " ?")
             if (x == true){
                 y.click()
             }
-            console.log(y)
         }
         function editItem(i){
             let y = document.getElementById('edit_button')
+            console.log(y)
             let x = prompt('Assign a new name for ' + i)
 
             if (!x == null || !x == ''){
                 y.value = String(i + "," + x)
                 y.click();
             }
-            console.log(y)
         }
-
-
-
 
     </script>
     

@@ -235,27 +235,44 @@ def cloud():
                 user_cloud.files = user_cloud.get_files()
 
         if "file_upload" in request.files:
-            f = request.files["file_upload"]
-            print(f)
-            if f.filename == "":
-                flash("No selected file")
+            files = request.files.getlist('file_upload')
+            print(files)
+
+            if len(files) < 1:
+                flash("No selected files")
                 return redirect(url_for("main.cloud"))
             #save file
-            path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, f.filename)
-            if not os.path.exists(path):
-                f.save(path)
-                #Check if size is appropitate
-                f_size = os.stat(path).st_size
-                storage_max         = current_user.storagelimit
-                storage_used        = user_cloud.get_storage_bytes()
-                storage_available   = storage_max - storage_used
-                if not f_size >= storage_available:
-                    flash("Saved ",{f.filename})
-                else:
-                    os.remove(path)
-                    flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
+            for i in files:
+                f = i.filename
+                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, f)
+                if not os.path.exists(path):
+                    i.save(path)
+                    #Check if size is appropitate
+                    f_size = os.stat(path).st_size
+                    storage_max         = current_user.storagelimit
+                    storage_used        = user_cloud.get_storage_bytes()
+                    storage_available   = storage_max - storage_used
+                    if not f_size >= storage_available:
+                        flash("Saved ",{f})
+                    else:
+                        os.remove(path)
+                        flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
 
-                user_cloud.files = user_cloud.get_files()
+            user_cloud.files = user_cloud.get_files()
+        
+        if "folders_upload" in request.files:
+            folders = request.files.getlist('folders_upload')
+            print(folders)
+            #main folder
+            #Fix this
+
+            if len(folders) < 1:
+                flash("No selected files")
+                return redirect(url_for("main.cloud"))
+
+            #user_cloud.files = user_cloud.get_files()
+
+
         
         if "delete" in request.form:
             value = request.form["delete"]
