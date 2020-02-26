@@ -1,7 +1,7 @@
 import os
 import sys
 HOST        = "192.168.10.180"
-PORT        = 80
+PORT        = 443
 
 if __name__ == "__main__":
     args = sys.argv[1:]
@@ -12,4 +12,4 @@ if __name__ == "__main__":
     if '-l' in args or '--localhost' in args:
         HOST = "localhost"
     
-    os.system(f"flask run -h {HOST} -p {PORT}  --with-threads")
+    os.system(f"flask run -h {HOST} -p {PORT} --cert=cert.pem --key=key.pem  --with-threads")
