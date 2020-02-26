@@ -361,9 +361,10 @@ a {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 5px;
-  width: 85%;
+  margin-top: 1em;
+  height: 3em;
   padding: 5px 0px;
+  width: 8em;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -377,6 +378,7 @@ a {
     outline-width: 0;
   background-color: #fff;
   border-bottom: 2px solid #F25F5C;
+  transform: scale(1.05);
 }
 
 .popupfoldertext{
@@ -387,9 +389,9 @@ a {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 5px;
   width: 85%;
   padding: 5px 0px;
+  margin: 1em;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;

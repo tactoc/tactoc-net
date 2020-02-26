@@ -82,6 +82,8 @@ class Cloud(object):
             os.mkdir(os.path.join(self.cloud_path, *SELECTED_FOLDER))
         self.files              = self.get_files()
 
+        
+
     def download_file(self,i):
         return os.path.join("cloud",*SELECTED_FOLDER, i)
 
@@ -103,13 +105,13 @@ class Cloud(object):
             return "{0} TB".format(round(int(B)/int(TB)))
 
     def parse_filename(self,i, typ):
-        if len(i) > 12:
+        if len(i) > 14:
             if typ == 0:
-                return i[:12]
+                return i[:18]
             elif typ == 1:
                 root_ext = os.path.splitext(os.path.join(self.cloud_path, *SELECTED_FOLDER, i))
                 ext = root_ext[1]
-                return i[:12] + ext
+                return i[:14] + ext
         return i
 
 
@@ -261,16 +263,34 @@ def cloud():
             user_cloud.files = user_cloud.get_files()
         
         if "folders_upload" in request.files:
-            folders = request.files.getlist('folders_upload')
-            print(folders)
-            #main folder
-            #Fix this
+            folder_upload = request.files.getlist('folders_upload')
+            
 
-            if len(folders) < 1:
-                flash("No selected files")
+            if folder_upload == "":
                 return redirect(url_for("main.cloud"))
 
-            #user_cloud.files = user_cloud.get_files()
+            path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER)
+            print(folder_upload)
+            #main folder
+            for f in folder_upload:
+                s_file                = f.filename
+                s_directories         = os.path.dirname(f.filename).split("/")
+
+                d_file                = os.path.join(path, s_file).replace("\\","/")
+                print(s_file)
+                print(s_directories)
+
+                #Create all directories
+                for i in s_directories:
+                    if not os.path.exists(os.path.join(path, *s_directories)):
+                        os.makedirs(os.path.join(path, *s_directories))
+                #Save all files
+                if not os.path.exists(d_file):
+                    f.save(d_file)
+                
+                print("##########")
+
+            user_cloud.files = user_cloud.get_files()
 
 
         
@@ -291,7 +311,7 @@ def cloud():
 
         if "edit" in request.form:
             target, value = request.form["edit"].split(",")
-            value = value[:12]
+            value = value
             print(target + value)
             #Check if folder or file
             checker = os.path.splitext(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target))
