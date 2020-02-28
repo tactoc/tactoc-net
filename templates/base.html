@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>tactoc</title>
+    <title>tactoc - Private Cloud Service</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge charset=ISO-8859-1"">
@@ -30,14 +30,19 @@
               <!--
                 <a class="nav-item nav-link active" href="{{ url_for('main.projects') }}">Projects</a>
               -->
-              <a class="nav-item nav-link active" href="{{ url_for('main.contact') }}">Contact</a>
+              
               
               {% if current_user.is_authenticated %}
+              <a class="nav-item nav-link active" href="{{ url_for('main.cloud') }}">Cloud</a>
                 <a class="nav-item nav-link active" href="{{ url_for('main.profile') }}">Profile</a>
-                <a class="nav-item nav-link active" href="{{ url_for('main.cloud') }}">Cloud</a>
                 <!--
                 <a class="nav-item nav-link active" href="{{ url_for('main.uploads') }}">Uploads</a>
                 -->
+
+                
+              {% endif %}
+              <a class="nav-item nav-link active" href="{{ url_for('main.contact') }}">Contact</a>
+              {% if current_user.is_authenticated %}
 
                 <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
               {% endif %}

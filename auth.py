@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import Users, Codes
 from . import db
@@ -9,8 +9,9 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login")
 def login():
-    logout_user()
-    return render_template("login.html")
+    if not current_user.is_authenticated:
+        return render_template("login.html")
+    return redirect(url_for('main.cloud'))
 
 @auth.route("/login", methods=["POST"])
 def login_post():
@@ -71,7 +72,7 @@ def signup_post():
         flash("Wrong code")
         return redirect(url_for("auth.signup"))
     
-    storagelimit = 5000000000 #5 GB
+    storagelimit = 5368709120 #5 GB in bytes
     date_of_creation = datetime.datetime.now()
 
     
@@ -81,6 +82,7 @@ def signup_post():
     db.session.add(new_user)
     db.session.delete(code)
     db.session.commit()
+    login_user(new_user)
 
     return redirect(url_for("auth.login"))
 
