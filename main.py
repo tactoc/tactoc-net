@@ -220,6 +220,7 @@ class Cloud(object):
                 print(dir_path)
 
             for file in files:
+			print(f"WRITE FROM {os.path.join(root,file)} TO: {os.path.join(dir_path,file)}")
                         zipf.write(os.path.join(root,file), os.path.join(dir_path, file))
 
         memory_zip.seek(0)
