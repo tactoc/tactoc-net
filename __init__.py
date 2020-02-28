@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin
-from colorama import init, Fore, Back, Style
 from os import path, mkdir
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -53,6 +52,5 @@ app.register_blueprint(auth_blueprint)
 from .main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
-#logger
-init()
+
 
