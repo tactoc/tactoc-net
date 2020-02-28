@@ -210,7 +210,6 @@ class Cloud(object):
     
     def zip_folder(self, i):
         path = os.path.join(self.cloud_path,*SELECTED_FOLDER, i)
-
         memory_zip = BytesIO()
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
@@ -222,8 +221,9 @@ class Cloud(object):
                     dir_path = root.split(self.username + "/")[1]
                 print(dir_path)
 
-            for file in files:
-                zipf.write(os.path.join(root,file), os.path.join(dir_path, file))
+                for f in files:
+                    print(os.path.join(root,f))
+                    zipf.write(os.path.join(root,f), os.path.join(dir_path, f))
         memory_zip.seek(0)
         return memory_zip
 
