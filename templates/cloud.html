@@ -6,7 +6,7 @@
     
     <div class="wrapper">
         
-        <div id="formContent2">
+        <div id="formContent">
             <form action="/cloud" method="POST">
                 <input type="submit" name="change_root" value="cloud" class="astextroot"></input>
             </form>
@@ -74,10 +74,6 @@
 
                     </div>
 
-
-
-
-
                 <div style="margin: 5px;" class="border"></div>
             </div>
             
@@ -90,7 +86,12 @@
                         <div>
                             <p style="color: #1F2833;"onclick="changefolder('{{ i }}')"class="clouditem astext float-left">{{ user_cloud.parse_filename(i,0) }}</p>
                             
-                        
+                            
+                            <div class="float-right" onclick="download_folder('{{ i }}')">
+                                <div class="edit-file-icon">
+                                    <img src="/static/icons/folder_download.svg" />
+                                </div>
+                            </div>
                             <div class="float-right" onclick="deleteItem('{{ i }}')">
                                 <div class="edit-file-icon">
                                     <img src="/static/icons/delete.svg" />
@@ -158,6 +159,10 @@
 
                 <form  action="/cloud" method="POST">
                     <input id="change_folder" name="change_folder" type="submit" class="hidden-submit">
+                </form>
+
+                <form  action="/cloud" method="POST">
+                    <input id="zip_folder" name="zip_folder" type="submit" class="hidden-submit">
                 </form>
             </div>
     </div>
@@ -248,6 +253,15 @@
                 y.value = String(i + "," + x)
                 y.click();
             }
+        }
+        function download_folder(i){
+            let y = document.getElementById('zip_folder');
+            console.log(y);
+            y.value = i;
+            y.click();
+            console.log(y.value);
+
+
         }
 
     </script>

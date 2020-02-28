@@ -119,8 +119,9 @@ a {
   margin-top: 2em;
   width: 100%;
   min-height: 100%;
-  animation: wrapperAnimation 1s;
 }
+
+
 .loginform{
   width: 20em;
   margin: 0 auto;
@@ -131,25 +132,15 @@ a {
   border-radius: 10px 10px 10px 10px;
   background: #FFF;
   padding: 1em;
-  width: 20em;
+  width: 20.5em;
   margin: 0 auto;
   position: relative;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   text-align: center;
+  overflow: hidden;
 }
-#formContent2 {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #FFF;
-  padding: 1em;
-  width: 21em;
-  margin: 0 auto;
-  position: relative;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  text-align: center;
-}
+
 .files{
   margin: 1em;
   margin-top: 0;
@@ -199,10 +190,6 @@ a {
   float:right;
 }
 
-@keyframes wrapperAnimation{
-  from {opacity: 0;}
-  to {opacity: 100;}
-}
 #cloudface{
   border-radius: 10px;
   background-color:	#43566e;
@@ -282,7 +269,8 @@ a {
 
 .border{
   margin: 1em;
-  border: solid #1F2833 1px;
+  background-color: #1F2833;
+  opacity: 0.2;
 }
 
 .cloudbutton{

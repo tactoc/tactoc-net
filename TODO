@@ -1,6 +1,7 @@
 
 1.0.1:
   ☐ Fix weird charset between flask and html
-  ☐ Fix layout
-  ☐ 
+  ✔ Fix layout at formcontent2 @done(20-02-28 09:58)
+  ☐ Add option to download folders @started(20-02-28 09:58)
+  
   

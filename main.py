@@ -1,10 +1,13 @@
-from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_from_directory, request, flash, redirect, url_for, jsonify
-from flask_login import login_required, current_user
+from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
+from flask_login import login_required, current_user, logout_user
 from colorama import init, Fore, Back, Style
 import os
 import shutil
+import zipfile
+from io import BytesIO
 from . import app, db
 from .models import Mails
+
 main = Blueprint("main", __name__)
 
 @main.route("/test")
@@ -326,10 +329,30 @@ def cloud():
                 except Exception as e:
                     flash(value + " is not a valid name!")
                 user_cloud.files = user_cloud.get_files()
+        
+        if "zip_folder" in request.form:
+            value = request.form["zip_folder"]
+            path = os.path.join(user_cloud.cloud_path,*SELECTED_FOLDER, value)
+
+            memory_file = BytesIO()
+
+            with zipfile.ZipFile(memory_file, "w") as zf:
+                for root, dirs, files in os.walk(path):
+                    print(root)
+                    for f in files:
+                        p = os.path.join(root, f)
+                        zf.write(os.path.join(root, f))
+                    print("###")
+        
+            memory_file.seek(0)
+            foldername = value + ".zip"
+            return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
+        
         return render_template("cloud.html", SELECTED_FOLDER=SELECTED_FOLDER, user_cloud=user_cloud)
     except Exception as e:
         print(str(e))
         flash(str(e))
+        logout_user()
         return redirect(url_for('main.cloud'))
 
 
@@ -339,6 +362,5 @@ def download_cloud(user,filename):
     user = current_user.username
     cloud = os.path.join(current_app.root_path, app.config["CLOUD_FOLDER"], user)
     return send_from_directory(directory=cloud, filename=filename)
-
 
 

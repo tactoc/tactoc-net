@@ -4,11 +4,11 @@
    
 
 <div class="wrapper" >
-    <div style="width: 24em;" id="formContent">
+    <div id="formContent">
         <h6 style=" color: #F25F5C; font-size: 4em; font-weight: bold;" >contact</h6>
         <p>Write me a message if you have any questions</p>
         <form action="/contact" method="POST">
-            <input maxlength="50" id="usernameInput" style=" padding: 10px; height: 3em; width: 10em;" class="authtext" name="usernameInput" type="text" 
+            <input maxlength="50" id="usernameInput" style=" padding: 10px; height: 3em; width: 8em;" class="float-left authtext" name="usernameInput" type="text" 
             {% if not user.is_authenticated %}
                 placeholder="Username"
             {% else %}
@@ -16,7 +16,7 @@
                 value="{{user.username}}"
             {% endif %}
             >
-            <input maxlength="50" style=" padding: 10px; height: 3em; width: 10em;" class="authtext" id="emailInput" name="emailInput" type="text"
+            <input maxlength="50" style=" padding: 10px; height: 3em; width: 8em;" class="float-right authtext" id="emailInput" name="emailInput" type="text"
             {% if not user.is_authenticated %}
                 placeholder="Email"
             {% else %}
@@ -27,12 +27,13 @@
             <div class="clearfix"></div>
             <input maxlength="50" style=" padding: 10px; height: 3em;  width: 10em;" class=" authtext" id="titleInput" name="titleInput" type="text" placeholder="Title">
             <div class="clearfix"></div>
-            <textarea  style=" text-align: left; padding: 10px; width: 20em; height: 20em;" class="float-none authtext" name="subjectInput" type="text" placeholder="Subject"  ></textarea>
+            <textarea  style=" text-align: left; padding: 10px; width: 18em; height: 15em;" class=" authtext" name="subjectInput" type="text" placeholder="Subject"  ></textarea>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <p style="color: #F25F5C">{{ messages[0]}}</p>
                 {% endif %}
-            {% endwith %}            
+            {% endwith %}         
+            <div class="clearfix"></div>   
             <input id="submit_message" src="/static/icons/send.svg"" type="image" alt="Submit" class="cloudicon custom-file-upload" value="Send">
         </form>
     </div>
