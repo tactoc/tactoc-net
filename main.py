@@ -215,11 +215,12 @@ class Cloud(object):
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(path):
-		print(root)
+                print(root)
                 dir_path = root.split(self.username + "\\")[1]
                 print(dir_path)
-		for file in files:
-                    zipf.write(os.path.join(root,file), os.path.join(dir_path, file))
+
+            for file in files:
+                        zipf.write(os.path.join(root,file), os.path.join(dir_path, file))
 
         memory_zip.seek(0)
         return memory_zip
