@@ -5,8 +5,8 @@ import shutil
 import zipfile
 import ntpath
 from io import BytesIO
-from . import app, db
-from .models import Mails
+from __init__ import app, db
+from models import Mails
 
 main = Blueprint("main", __name__)
 

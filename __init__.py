@@ -5,52 +5,56 @@ from os import path, mkdir
 db = SQLAlchemy()
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'MZvKzJmUl8gN6z5jptAO'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024 * 1024 # 10 gb max
 
-app.config['MEDIA_FOLDER'] = '/media'
-app.config['TACTOCNET_FOLDER'] = '/media/tactoc-net'
-app.config['UPLOAD_FOLDER'] = '/media/tactoc-net/uploads'
-app.config['CLOUD_FOLDER'] = '/media/tactoc-net/cloud'
+if __name__ == "__main__":
+    app.config['SECRET_KEY'] = 'MZvKzJmUl8gN6z5jptAO'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024 * 1024 # 10 gb max
 
-try:
-    if not path.exists(app.config['MEDIA_FOLDER']):
-        mkdir(app.config['MEDIA_FOLDER'])
-        print("Created /media")
+    app.config['MEDIA_FOLDER'] = '/media'
+    app.config['TACTOCNET_FOLDER'] = '/media/tactoc-net'
+    app.config['UPLOAD_FOLDER'] = '/media/tactoc-net/uploads'
+    app.config['CLOUD_FOLDER'] = '/media/tactoc-net/cloud'
 
-    if not path.exists(app.config['TACTOCNET_FOLDER']):
-        mkdir(app.config['TACTOCNET_FOLDER'])
-        print("Created /media/tactoc-net")
+    try:
+        if not path.exists(app.config['MEDIA_FOLDER']):
+            mkdir(app.config['MEDIA_FOLDER'])
+            print("Created /media")
 
-    if not path.exists(app.config['UPLOAD_FOLDER']):
-        mkdir(app.config['UPLOAD_FOLDER'])
-        print("Created /media/tactoc-net/uploads")
+        if not path.exists(app.config['TACTOCNET_FOLDER']):
+            mkdir(app.config['TACTOCNET_FOLDER'])
+            print("Created /media/tactoc-net")
 
-    if not path.exists(app.config['CLOUD_FOLDER']):
-        mkdir(app.config['CLOUD_FOLDER'])
-        print("Created /media/tactoc-net/cloud")
-except Exception as e:
-    print(e)
-    quit(0)
+        if not path.exists(app.config['UPLOAD_FOLDER']):
+            mkdir(app.config['UPLOAD_FOLDER'])
+            print("Created /media/tactoc-net/uploads")
 
-db.init_app(app)
+        if not path.exists(app.config['CLOUD_FOLDER']):
+            mkdir(app.config['CLOUD_FOLDER'])
+            print("Created /media/tactoc-net/cloud")
+    except Exception as e:
+        print(e)
+        quit(0)
 
-login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
-login_manager.init_app(app)
+    db.init_app(app)
 
-from .models import Users
-@login_manager.user_loader
-def load_user(user_id):
-    return Users.query.get(int(user_id))
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
 
-from .auth import auth as auth_blueprint
-app.register_blueprint(auth_blueprint)
+    from models import Users
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Users.query.get(int(user_id))
 
-from .main import main as main_blueprint
-app.register_blueprint(main_blueprint)
+    from auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
+
+    from main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    app.run(host="192.168.10.180", port=80, threaded=True)
 
 
 
