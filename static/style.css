@@ -301,7 +301,7 @@ a {
 }
 .edit-file-icon{
   cursor: pointer;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.4s ease-in-out;
   opacity: 0.1;
 }
 .edit-file-icon:hover{
@@ -341,7 +341,6 @@ a {
 
 }
 .customchoosefile{
-  background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
   text-align: center;
@@ -353,15 +352,10 @@ a {
   margin-right: 1em;
   height: 3em;
   padding: 5px 0px;
-  width: 8em;
-  border: 2px solid #f6f6f6;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
+  width: 6em;
+
+  transition: all 0.2s ease-in-out;
+
 }
 .customchoosefile:hover{
     outline-width: 0;

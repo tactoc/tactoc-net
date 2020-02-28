@@ -83,33 +83,41 @@
             <div class="files">
                 {% if user_cloud.has_files() %}
                     {% for i in user_cloud.files[0][1]: %}
-                        <div>
-                            <p style="color: #1F2833;"onclick="changefolder('{{ i }}')"class="clouditem astext float-left">{{ user_cloud.parse_filename(i,0) }}</p>
+                        {% if i|length > 14 %}
+                            <div title="{{ i }}">
+                        {% else %}
+                            <div>
+                        {% endif %}
+                            <p alt style="color: #1F2833;"onclick="changefolder('{{ i }}')"class="clouditem astext float-left">{{ user_cloud.parse_filename(i,0) }}</p>
                             
                             
-                            <div class="float-right" onclick="download_folder('{{ i }}')">
-                                <div class="edit-file-icon">
-                                    <img src="/static/icons/folder_download.svg" />
-                                </div>
-                            </div>
                             <div class="float-right" onclick="deleteItem('{{ i }}')">
                                 <div class="edit-file-icon">
                                     <img src="/static/icons/delete.svg" />
                                 </div>
                             </div>
                             <div class="float-right" onclick="editItem('{{ i }}')">
-                                    <div class="edit-file-icon">
-                                        <img src="/static/icons/edit.svg" />
-                                    </div>
+                                <div class="edit-file-icon">
+                                    <img src="/static/icons/edit.svg" />
+                                </div>
                             </div>
-                                
+                            <div class="float-right" onclick="download_folder('{{ i }}')">
+                                <div class="edit-file-icon">
+                                    <img src="/static/icons/download_folder-01.svg" />
+                                </div>
+                            </div>
+                            
                             <p  class="bytes-animation float-right">{{ user_cloud.get_size(i) }}</p>
                             <div class="clearfix"></div>
                         </div>
                     {% endfor %}
 
                     {% for i in user_cloud.files[0][2]: %}
+                        {% if i|length > 14 %}
+                        <div title="{{ i }}">
+                        {% else %}
                         <div>
+                        {% endif %}
                             <a style="color: inherit;color: #F25F5C;" target="_blank"  href="/{{ user_cloud.download_file(i) }}" class="clouditem float-left">{{ user_cloud.parse_filename(i,1) }}</a>
                             
                             <div class="float-right" onclick="deleteItem('{{ i }}');" >
@@ -135,7 +143,7 @@
 
 
     
-                {% if SELECTED_FOLDER|length > 1: %}
+                {% if SELECTED_FOLDER|length > 1 %}
                     <div class="custom-file-upload">
                         <form action="/cloud" method="POST">
                             <input style="width: 2em; height: 2em;" type="image" src="/static/icons/go_back.svg" alt="submit" name="back"  value="back"></input>

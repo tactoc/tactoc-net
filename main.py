@@ -4,6 +4,7 @@ from colorama import init, Fore, Back, Style
 import os
 import shutil
 import zipfile
+import ntpath
 from io import BytesIO
 from . import app, db
 from .models import Mails
@@ -107,13 +108,17 @@ class Cloud(object):
             return "{0} TB".format(round(int(B)/int(TB)))
 
     def parse_filename(self,i, typ):
-        if len(i) > 14:
+        
+        file_path = os.path.join(self.cloud_path, *SELECTED_FOLDER, i)
+        cut = 14
+        if len(i) > cut:
             if typ == 0:
-                return i[:18]
+                return i[:cut]
             elif typ == 1:
-                root_ext = os.path.splitext(os.path.join(self.cloud_path, *SELECTED_FOLDER, i))
-                ext = root_ext[1]
-                return i[:14] + ext
+                file = os.path.splitext(file_path)
+                ext = file[1]
+                name = ntpath.basename(file[0])[:cut]
+                return name + ext
         return i
 
 
@@ -202,6 +207,22 @@ class Cloud(object):
     def go_back(self):
         if not len(SELECTED_FOLDER) == 1:
             del SELECTED_FOLDER[-1]
+    
+    def zip_folder(self, i):
+        path = os.path.join(self.cloud_path,*SELECTED_FOLDER, i)
+
+        memory_zip = BytesIO()
+
+        with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(path):
+                dir_path = root.split(self.username + "\\")[1]
+                for file in files:
+                    zipf.write(os.path.join(root,file), os.path.join(dir_path, file))
+
+
+        memory_zip.seek(0)
+        return memory_zip
+
 
 @main.route("/cloud", methods=["GET", "POST"])
 @login_required
@@ -224,20 +245,22 @@ def cloud():
                 user_cloud.change_folder(value)
                 print(SELECTED_FOLDER)
                 user_cloud.files = user_cloud.get_files()
+
             if "back.x" in request.form or "back.y" in request.form:
                 user_cloud.go_back()
                 print(SELECTED_FOLDER)
                 user_cloud.files = user_cloud.get_files()
 
-
-            ##files and stuff
             if "newfoldername" in request.form:
                 value = request.form["newfoldername"]
                 path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
-                if not os.path.exists(path):
-                    os.mkdir(path)
-                    flash("Created ", value)
-                    user_cloud.files = user_cloud.get_files()
+                try:
+                    if not os.path.exists(path):
+                        os.mkdir(path)
+                        flash("Created ", value)
+                        user_cloud.files = user_cloud.get_files()
+                except:
+                    flash(value + " is not a valid folder name!")
 
             if "file_upload" in request.files:
                 files = request.files.getlist('file_upload')
@@ -296,8 +319,6 @@ def cloud():
                     print("##########")
 
                 user_cloud.files = user_cloud.get_files()
-
-
             
             if "delete" in request.form:
                 value = request.form["delete"]
@@ -330,23 +351,12 @@ def cloud():
                     flash(value + " is not a valid name!")
                 user_cloud.files = user_cloud.get_files()
         
-        if "zip_folder" in request.form:
-            value = request.form["zip_folder"]
-            path = os.path.join(user_cloud.cloud_path,*SELECTED_FOLDER, value)
-
-            memory_file = BytesIO()
-
-            with zipfile.ZipFile(memory_file, "w") as zf:
-                for root, dirs, files in os.walk(path):
-                    print(root)
-                    for f in files:
-                        p = os.path.join(root, f)
-                        zf.write(os.path.join(root, f))
-                    print("###")
-        
-            memory_file.seek(0)
-            foldername = value + ".zip"
-            return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
+            if "zip_folder" in request.form:
+                value = request.form["zip_folder"]
+                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
+                memory_file = user_cloud.zip_folder(path)
+                foldername = value + ".zip"
+                return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
         
         return render_template("cloud.html", SELECTED_FOLDER=SELECTED_FOLDER, user_cloud=user_cloud)
     except Exception as e:
