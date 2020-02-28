@@ -216,7 +216,7 @@ class Cloud(object):
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(path):
                 print(root)
-                dir_path = root.split(self.username + "\\")[1]
+                dir_path = root.split(self.username + "/")[1]
                 print(dir_path)
 
             for file in files:
