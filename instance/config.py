@@ -10,6 +10,3 @@ TACTOCNET_FOLDER                = '/media/tactoc-net'
 UPLOADS_FOLDER                   = '/media/tactoc-net/uploads'
 CLOUD_FOLDER                    = '/media/tactoc-net/cloud'
 
-
-#Debugging
-DEBUG = True
