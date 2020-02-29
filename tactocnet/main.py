@@ -1,6 +1,6 @@
+from __future__ import print_function
 from flask import flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user, logout_user
-from __future__ import print_function
 import os
 import shutil
 import zipfile
