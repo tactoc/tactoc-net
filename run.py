@@ -1,15 +1,20 @@
-import os
-import sys
-HOST        = "192.168.10.180"
-PORT        = 80
+from app import create_app
+from sys import argv
+app =create_app()
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    os.environ['FLASK_APP'] = '__init__.py'
-    if '-d' in args or '--debug' in args:
-        print('DEBUG = TRUE')
-        os.environ['FLASK_DEBUG'] = "1"
-    if '-l' in args or '--localhost' in args:
-        HOST = "localhost"
+    args = {}
+    args["debug"]           = False
+    args["host"]            = "192.168.10.180"
+    args["port"]            = 80
+    args["threaded"]        = True
+
+    if  "-l" in argv:
+        args["host"]        = "localhost"
+    if "-d" in argv:
+        args["debug"]       = True
+
+
+
     
-    os.system(f"flask run -h {HOST} -p {PORT} --with-threads")
+    app.run(**args)
