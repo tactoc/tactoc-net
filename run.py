@@ -1,6 +1,6 @@
-from app import create_app
+from tactocnet import app
 from sys import argv
-app =create_app()
+
 
 if __name__ == "__main__":
     args = {}

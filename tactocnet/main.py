@@ -1,5 +1,5 @@
 from __future__ import print_function
-from flask import flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
+from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user, logout_user
 import os
 import shutil
@@ -11,6 +11,22 @@ from .models import Mails
 from .models import Users
 
 main = Blueprint("main", __name__)
+
+def path_join(*args):
+    path = ""
+    for i in args:
+        if isinstance(i, str):
+            if i == args[-1]:
+                ext = os.path.splitext(i)
+                if not ext[1] == "":
+                    path = path + i
+                    break
+            else:
+                path = path + i + os.sep
+        if isinstance(i, list):
+            for y in i:
+                path = path + y + os.sep
+    return path
 
 
 @main.route("/")
@@ -98,7 +114,7 @@ class Uploads(object):
             return "{0} TB".format(round(int(B)/int(TB)))
 
     def get_size(self,i):
-        path = os.path.join(self.uploads_path, i)
+        path = path_join(self.uploads_path, i)
         fileinfo = os.stat(path)
         return self.parse_bytes(fileinfo.st_size)
 
@@ -112,7 +128,7 @@ class Uploads(object):
         return False
 
     def parse_filename(self,i):
-        file_path = os.path.join(self.uploads_path,i)
+        file_path = path_join(self.uploads_path,i)
         cut = 14
         if len(i) > cut:
             file = os.path.splitext(file_path)
@@ -137,7 +153,7 @@ def uploads():
 
         if "delete_upload" in request.form:
             value = request.form["delete_upload"]
-            path_to_file = os.path.join(upload_obj.uploads_path, value)
+            path_to_file = path_join(upload_obj.uploads_path, value)
 
             os.remove(path_to_file)
             upload_obj.update_directory()
@@ -147,9 +163,9 @@ def uploads():
             target, value = request.form["edit_upload"].split(",")
             print(target + value)
             #Check if folder or file
-            ext = os.path.splitext(os.path.join(upload_obj.uploads_path, target))[1]
+            ext = os.path.splitext(path_join(upload_obj.uploads_path, target))[1]
             try:
-                os.rename(os.path.join(upload_obj.uploads_path, target), os.path.join(upload_obj.uploads_path, value + ext))
+                os.rename(path_join(upload_obj.uploads_path, target), path_join(upload_obj.uploads_path, value + ext))
             except Exception as e:
                 print(e)
                 flash(value + " is not a valid name!")
@@ -165,7 +181,7 @@ def uploads():
             #save file
             for i in files:
                 f = i.filename
-                path = os.path.join(upload_obj.uploads_path, f)
+                path = path_join(upload_obj.uploads_path, f)
                 if not os.path.exists(path):
                     path = Markup.escape(path)
                     i.save(path)
@@ -179,7 +195,7 @@ def uploads():
 @main.route("/uploads/<path:filename>", methods=["GET", "POST"])
 @login_required
 def download_upload(filename):
-    uploads = os.path.join(current_app.root_path, app.config["UPLOADS_FOLDER"])
+    uploads = path_join(current_app.root_path, app.config["UPLOADS_FOLDER"])
     return send_from_directory(directory=uploads, filename=filename)
 
 
@@ -195,8 +211,8 @@ class Cloud(object):
         self.storagelimit       = current_user.storagelimit
         self.cloud_path         = app.config["CLOUD_FOLDER"]
         ##check if folder exists
-        if not os.path.exists(os.path.join(self.cloud_path, *SELECTED_FOLDER)):
-            os.mkdir(os.path.join(self.cloud_path, *SELECTED_FOLDER))
+        if not os.path.exists(path_join(self.cloud_path, SELECTED_FOLDER)):
+            os.mkdir(path_join(self.cloud_path, SELECTED_FOLDER))
         self.files              = self.get_files()
 
         
@@ -204,8 +220,9 @@ class Cloud(object):
     def update_directory(self):
         self.files = self.get_files()
 
+
     def download_file(self,i):
-        return os.path.join("cloud",*SELECTED_FOLDER, i)
+        return path_join("cloud",SELECTED_FOLDER, i)
 
     def parse_bytes(self,B):
         B   = float(B)
@@ -226,7 +243,7 @@ class Cloud(object):
 
 
     def parse_filename(self,i, typ):
-        file_path = os.path.join(self.cloud_path, *SELECTED_FOLDER, i)
+        file_path = path_join(self.cloud_path, SELECTED_FOLDER, i)
         cut = 14
         if len(i) > cut:
             if typ == 0:
@@ -241,10 +258,10 @@ class Cloud(object):
 
     def get_storage(self):
         total_size = 0
-        path = os.path.join(self.cloud_path, self.username)
+        path = path_join(self.cloud_path, self.username)
         for dirpath, dirnames, filenames in os.walk(path):
             for f in filenames:
-                fp = os.path.join(dirpath, f)
+                fp = path_join(dirpath, f)
 
                 if not os.path.islink(fp):
                     total_size += os.path.getsize(fp)
@@ -252,10 +269,10 @@ class Cloud(object):
     
     def get_storage_bytes(self):
         total_size = 0
-        path = os.path.join(self.cloud_path, self.username)
+        path = path_join(self.cloud_path, self.username)
         for dirpath, dirnames, filenames in os.walk(path):
             for f in filenames:
-                fp = os.path.join(dirpath, f)
+                fp = path_join(dirpath, f)
 
                 if not os.path.islink(fp):
                     total_size += os.path.getsize(fp)
@@ -265,13 +282,13 @@ class Cloud(object):
         return self.parse_bytes(self.storagelimit)
 
     def get_size(self,i):
-        path = os.path.join(self.cloud_path, *SELECTED_FOLDER, i)
+        path = path_join(self.cloud_path, SELECTED_FOLDER, i)
         fileinfo = os.stat(path)
         if os.path.isdir(path):
             total_size = 0
             for dirpath, dirnames, filenames in os.walk(path):
                 for f in filenames:
-                    fp = os.path.join(dirpath, f)
+                    fp = path_join(dirpath, f)
 
                     if not os.path.islink(fp):
                         total_size += os.path.getsize(fp)
@@ -295,7 +312,7 @@ class Cloud(object):
         return dots + "/".join(SELECTED_FOLDER[-2:])
     
     def get_files(self):
-        path = os.path.join(self.cloud_path, *SELECTED_FOLDER)
+        path = path_join(self.cloud_path, SELECTED_FOLDER)
         generator = os.walk(path)
         files = []
         for i in generator:
@@ -303,7 +320,7 @@ class Cloud(object):
         return files
 
     def has_files(self):
-        generator = os.listdir(os.path.join(self.cloud_path, *SELECTED_FOLDER))
+        generator = os.listdir(path_join(self.cloud_path, SELECTED_FOLDER))
         files = []
         for i in generator:
             files.append(i)
@@ -312,7 +329,7 @@ class Cloud(object):
         return False
 
     def not_files(self):
-        generator = os.listdir(os.path.join(self.cloud_path, *SELECTED_FOLDER))
+        generator = os.listdir(path_join(self.cloud_path, SELECTED_FOLDER))
         files = []
         for i in generator:
             files.append(i)
@@ -325,7 +342,7 @@ class Cloud(object):
             del SELECTED_FOLDER[-1]
     
     def zip_folder(self, i):
-        path = os.path.join(self.cloud_path,*SELECTED_FOLDER, i)
+        path = path_join(self.cloud_path,SELECTED_FOLDER, i)
         memory_zip = BytesIO()
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
@@ -338,8 +355,8 @@ class Cloud(object):
                 print(dir_path)
 
                 for f in files:
-                    print(os.path.join(root,f))
-                    zipf.write(os.path.join(root,f), os.path.join(dir_path, f))
+                    print(path_join(root,f))
+                    zipf.write(path_join(root,f), path_join(dir_path, f))
         memory_zip.seek(0)
         return memory_zip
 
@@ -373,7 +390,7 @@ def cloud():
 
             if "newfoldername" in request.form:
                 value = request.form["newfoldername"]
-                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
+                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
                 try:
                     if not os.path.exists(path):
                         os.mkdir(path)
@@ -392,7 +409,7 @@ def cloud():
                 #save file
                 for i in files:
                     f = i.filename
-                    path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, f)
+                    path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
                     if not os.path.exists(path):
                         path = Markup.escape(path)
                         i.save(path)
@@ -416,13 +433,13 @@ def cloud():
                 if folder_upload == "":
                     return redirect(url_for("main.cloud"))
 
-                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER)
+                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
                 print(folder_upload)
                 #main folder
                 for f in folder_upload:
                     s_file                = f.filename
                     s_directories         = os.path.dirname(f.filename).split("/")
-                    d_file                = os.path.join(path, s_file).replace("\\","/")
+                    d_file                = path_join(path, s_file).replace("\\","/")
                     if "&#39;" in d_file:
                         flash("Folders containing ' is not allowed")
                         break
@@ -431,8 +448,8 @@ def cloud():
                     print(s_directories)
                     #Create all directories
                     for i in s_directories:
-                        if not os.path.exists(os.path.join(path, *s_directories)):
-                            os.makedirs(os.path.join(path, *s_directories))
+                        if not os.path.exists(path_join(path, *s_directories)):
+                            os.makedirs(path_join(path, *s_directories))
                     #Save all files
                     if not os.path.exists(d_file):
                         f.save(d_file)
@@ -442,7 +459,7 @@ def cloud():
             
             if "delete" in request.form:
                 value = request.form["delete"]
-                path_to_file = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
+                path_to_file = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
                 #Check if folder or file
                 if os.path.splitext(path_to_file)[1] == "":
                     if os.path.isdir(path_to_file):
@@ -460,20 +477,20 @@ def cloud():
                 value = value
                 print(target + value)
                 #Check if folder or file
-                checker = os.path.splitext(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target))
+                checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
                 try:
                     if checker[1] == "":
-                        os.rename(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target), os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value))
+                        os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
                     else:
                         value = value + checker[1]
-                        os.rename(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target), os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value))
+                        os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
                 except Exception as e:
                     flash(value + " is not a valid name!")
                 user_cloud.update_directory()
         
             if "zip_folder" in request.form:
                 value = request.form["zip_folder"]
-                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
+                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
                 memory_file = user_cloud.zip_folder(path)
                 foldername = value + ".zip"
                 return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
