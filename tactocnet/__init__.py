@@ -14,7 +14,7 @@ try:
 
     if not path.exists(app.config['TACTOCNET_FOLDER']):
         mkdir(app.config['TACTOCNET_FOLDER'])
-        print("Created /media/tactoc-net")
+        print("Created /media/tactocnet")
 
     if not path.exists(app.config['UPLOADS_FOLDER']):
         mkdir(app.config['UPLOADS_FOLDER'])
@@ -25,7 +25,6 @@ try:
         print("Created /media/tactoc-net/cloud")
 except Exception as e:
     print(e)
-    
 
 db.init_app(app)
 
