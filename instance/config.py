@@ -6,7 +6,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS  = True
 MAX_CONTENT_LENGTH              = 10 * 1024 * 1024 * 1024 # 10 gb max
 
 MEDIA_FOLDER                    = '/media'
-TACTOCNET_FOLDER                = '/media/tactoc-net'
-UPLOADS_FOLDER                   = '/media/tactoc-net/uploads'
-CLOUD_FOLDER                    = '/media/tactoc-net/cloud'
+TACTOCNET_FOLDER                = '/media/tactocnet'
+UPLOADS_FOLDER                   = '/media/tactocnet/uploads'
+CLOUD_FOLDER                    = '/media/tactocnet/cloud'
 

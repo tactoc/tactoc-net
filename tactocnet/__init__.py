@@ -18,11 +18,11 @@ try:
 
     if not path.exists(app.config['UPLOADS_FOLDER']):
         mkdir(app.config['UPLOADS_FOLDER'])
-        print("Created /media/tactoc-net/uploads")
+        print("Created /media/tactocnet/uploads")
 
     if not path.exists(app.config['CLOUD_FOLDER']):
         mkdir(app.config['CLOUD_FOLDER'])
-        print("Created /media/tactoc-net/cloud")
+        print("Created /media/tactocnet/cloud")
 except Exception as e:
     print(e)
 
