@@ -365,10 +365,10 @@ class Cloud(object):
 @login_required
 def cloud():
     global SELECTED_FOLDER
+    SELECTED_FOLDER[0] = current_user.username
+    print(SELECTED_FOLDER)
+    user_cloud = Cloud()
     try:
-        SELECTED_FOLDER[0] = current_user.username
-        user_cloud = Cloud()
-        print(SELECTED_FOLDER)
 
         if request.method == "POST":
             print("FORMS: ",request.form)
