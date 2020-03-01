@@ -368,135 +368,130 @@ def cloud():
     SELECTED_FOLDER[0] = current_user.username
     print(SELECTED_FOLDER)
     user_cloud = Cloud()
-    try:
+    if request.method == "POST":
+        print("FORMS: ",request.form)
+        if "change_root" in request.form:
+            SELECTED_FOLDER = [""]
+            SELECTED_FOLDER[0] = current_user.username
+            user_cloud.update_directory()
 
-        if request.method == "POST":
-            print("FORMS: ",request.form)
-            if "change_root" in request.form:
-                SELECTED_FOLDER = [""]
-                SELECTED_FOLDER[0] = current_user.username
-                user_cloud.update_directory()
+        if "change_folder" in request.form:
+            value = request.form["change_folder"]
+            user_cloud.change_folder(value)
+            print(SELECTED_FOLDER)
+            user_cloud.update_directory()
 
-            if "change_folder" in request.form:
-                value = request.form["change_folder"]
-                user_cloud.change_folder(value)
-                print(SELECTED_FOLDER)
-                user_cloud.update_directory()
+        if "back.x" in request.form or "back.y" in request.form:
+            user_cloud.go_back()
+            print(SELECTED_FOLDER)
+            user_cloud.update_directory()
 
-            if "back.x" in request.form or "back.y" in request.form:
-                user_cloud.go_back()
-                print(SELECTED_FOLDER)
-                user_cloud.update_directory()
+        if "newfoldername" in request.form:
+            value = request.form["newfoldername"]
+            path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            try:
+                if not os.path.exists(path):
+                    os.mkdir(path)
+                    flash("Created ", value)
+                    user_cloud.update_directory()
+            except:
+                flash(value + " is not a valid folder name!")
 
-            if "newfoldername" in request.form:
-                value = request.form["newfoldername"]
-                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-                try:
-                    if not os.path.exists(path):
-                        os.mkdir(path)
-                        flash("Created ", value)
-                        user_cloud.update_directory()
-                except:
-                    flash(value + " is not a valid folder name!")
+        if "file_upload" in request.files:
+            files = request.files.getlist('file_upload')
+            print(files)
 
-            if "file_upload" in request.files:
-                files = request.files.getlist('file_upload')
-                print(files)
-
-                if len(files) < 1:
-                    flash("No selected files")
-                    return redirect(url_for("main.cloud"))
-                #save file
-                for i in files:
-                    f = i.filename
-                    path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
-                    if not os.path.exists(path):
-                        path = Markup.escape(path)
-                        i.save(path)
-                        #Check if size is appropitate
-                        f_size = os.stat(path).st_size
-                        storage_max         = current_user.storagelimit
-                        storage_used        = user_cloud.get_storage_bytes()
-                        storage_available   = storage_max - storage_used
-                        if not f_size >= storage_available:
-                            flash("Saved ",f)
-                        else:
-                            os.remove(path)
-                            flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
-
-                user_cloud.update_directory()
-            
-            if "folders_upload" in request.files:
-                folder_upload = request.files.getlist('folders_upload')
-                
-
-                if folder_upload == "":
-                    return redirect(url_for("main.cloud"))
-
-                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
-                print(folder_upload)
-                #main folder
-                for f in folder_upload:
-                    s_file                = f.filename
-                    s_directories         = os.path.dirname(f.filename).split("/")
-                    d_file                = path_join(path, s_file).replace("\\","/")
-                    if "&#39;" in d_file:
-                        flash("Folders containing ' is not allowed")
-                        break
-                    
-                    print(s_file)
-                    print(s_directories)
-                    #Create all directories
-                    for i in s_directories:
-                        if not os.path.exists(path_join(path, *s_directories)):
-                            os.makedirs(path_join(path, *s_directories))
-                    #Save all files
-                    if not os.path.exists(d_file):
-                        f.save(d_file)
-                    print("##########")
-
-                user_cloud.update_directory()
-            
-            if "delete" in request.form:
-                value = request.form["delete"]
-                path_to_file = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-                #Check if folder or file
-                if os.path.splitext(path_to_file)[1] == "":
-                    if os.path.isdir(path_to_file):
-                        shutil.rmtree(path_to_file)
-                        
-                    if os.path.isfile(path_to_file):
-                        os.remove(path_to_file)
-                else:
-                    os.remove(path_to_file)
-                user_cloud.update_directory()
-                flash("Removed " + value)
-
-            if "edit" in request.form:
-                target, value = request.form["edit"].split(",")
-                value = value
-                print(target + value)
-                #Check if folder or file
-                checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
-                try:
-                    if checker[1] == "":
-                        os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
+            if len(files) < 1:
+                flash("No selected files")
+                return redirect(url_for("main.cloud"))
+            #save file
+            for i in files:
+                f = i.filename
+                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
+                if not os.path.exists(path):
+                    path = Markup.escape(path)
+                    i.save(path)
+                    #Check if size is appropitate
+                    f_size = os.stat(path).st_size
+                    storage_max         = current_user.storagelimit
+                    storage_used        = user_cloud.get_storage_bytes()
+                    storage_available   = storage_max - storage_used
+                    if not f_size >= storage_available:
+                        flash("Saved ",f)
                     else:
-                        value = value + checker[1]
-                        os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
-                except Exception as e:
-                    flash(value + " is not a valid name!")
-                user_cloud.update_directory()
+                        os.remove(path)
+                        flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
+
+            user_cloud.update_directory()
         
-            if "zip_folder" in request.form:
-                value = request.form["zip_folder"]
-                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-                memory_file = user_cloud.zip_folder(path)
-                foldername = value + ".zip"
-                return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
-    except Exception as e:
-        print(e)
-        flash(e)
+        if "folders_upload" in request.files:
+            folder_upload = request.files.getlist('folders_upload')
+            
+
+            if folder_upload == "":
+                return redirect(url_for("main.cloud"))
+
+            path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
+            print(folder_upload)
+            #main folder
+            for f in folder_upload:
+                s_file                = f.filename
+                s_directories         = os.path.dirname(f.filename).split("/")
+                d_file                = path_join(path, s_file).replace("\\","/")
+                if "&#39;" in d_file:
+                    flash("Folders containing ' is not allowed")
+                    break
+                
+                print(s_file)
+                print(s_directories)
+                #Create all directories
+                for i in s_directories:
+                    if not os.path.exists(path_join(path, *s_directories)):
+                        os.makedirs(path_join(path, *s_directories))
+                #Save all files
+                if not os.path.exists(d_file):
+                    f.save(d_file)
+                print("##########")
+
+            user_cloud.update_directory()
+        
+        if "delete" in request.form:
+            value = request.form["delete"]
+            path_to_file = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            #Check if folder or file
+            if os.path.splitext(path_to_file)[1] == "":
+                if os.path.isdir(path_to_file):
+                    shutil.rmtree(path_to_file)
+                    
+                if os.path.isfile(path_to_file):
+                    os.remove(path_to_file)
+            else:
+                os.remove(path_to_file)
+            user_cloud.update_directory()
+            flash("Removed " + value)
+
+        if "edit" in request.form:
+            target, value = request.form["edit"].split(",")
+            value = value
+            print(target + value)
+            #Check if folder or file
+            checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
+            try:
+                if checker[1] == "":
+                    os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
+                else:
+                    value = value + checker[1]
+                    os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
+            except Exception as e:
+                flash(value + " is not a valid name!")
+            user_cloud.update_directory()
+    
+        if "zip_folder" in request.form:
+            value = request.form["zip_folder"]
+            path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            memory_file = user_cloud.zip_folder(path)
+            foldername = value + ".zip"
+            return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
     
     return render_template("/main/cloud.html", SELECTED_FOLDER=SELECTED_FOLDER, user_cloud=user_cloud)
 
