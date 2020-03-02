@@ -1,4 +1,3 @@
-from __future__ import print_function
 from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user, logout_user
 import os
@@ -21,18 +20,16 @@ print
 
 def path_join(*args):
     path = ""
+    print(args)
     for i in args:
         if isinstance(i, str):
-            if i == args[-1]:
-                ext = os.path.splitext(i)
-                if not ext[1] == "":
-                    path = path + i
-                    break
-            else:
-                path = path + i + os.sep
-        if isinstance(i, list):
+            path = os.path.join(path, i)
+        if isinstance(i,list):
             for y in i:
-                path = path + y + os.sep
+                path = os.path.join(path,y)
+    #fix slashes
+    path = path.replace("\\","/")
+
     return path
 
 
@@ -63,10 +60,6 @@ def contact():
         emailInput      = data["emailInput"]
         titleInput      = data["titleInput"]
         subjectInput    = data["subjectInput"]
-        print(usernameInput)
-        print(emailInput)
-        print(titleInput)
-        print(subjectInput)
         if "" in [usernameInput,emailInput,titleInput,subjectInput]:
             flash("Please fill out all of the fields")
             return render_template("contact.html", user=user)
@@ -168,19 +161,16 @@ def uploads():
 
         if "edit_upload" in request.form:
             target, value = request.form["edit_upload"].split(",")
-            print(target + value)
             #Check if folder or file
             ext = os.path.splitext(path_join(upload_obj.uploads_path, target))[1]
             try:
                 os.rename(path_join(upload_obj.uploads_path, target), path_join(upload_obj.uploads_path, value + ext))
             except Exception as e:
-                print(e)
                 flash(value + " is not a valid name!")
             upload_obj.update_directory()
 
         if "file_upload_upload" in request.files:
             files = request.files.getlist('file_upload_upload')
-            print(files)
 
             if len(files) < 1:
                 flash("No selected files")
@@ -307,7 +297,6 @@ class Cloud(object):
     def change_folder(self, value):
         if not value == SELECTED_FOLDER[-1]:
             SELECTED_FOLDER.append(value)
-        print(SELECTED_FOLDER)
     
     def get_folder(self):
         return SELECTED_FOLDER[-1]
@@ -354,15 +343,12 @@ class Cloud(object):
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(path):
-                print(root)
                 if "\\" in root:
                     dir_path = root.split(self.username + "\\")[1]
                 else:
                     dir_path = root.split(self.username + "/")[1]
-                print(dir_path)
 
                 for f in files:
-                    print(path_join(root,f))
                     zipf.write(path_join(root,f), path_join(dir_path, f))
         memory_zip.seek(0)
         return memory_zip
@@ -373,10 +359,8 @@ class Cloud(object):
 def cloud():
     global SELECTED_FOLDER
     SELECTED_FOLDER[0] = current_user.username
-    print(SELECTED_FOLDER)
     user_cloud = Cloud()
     if request.method == "POST":
-        print("FORMS: ",request.form)
         if "change_root" in request.form:
             SELECTED_FOLDER = [""]
             SELECTED_FOLDER[0] = current_user.username
@@ -385,17 +369,17 @@ def cloud():
         if "change_folder" in request.form:
             value = request.form["change_folder"]
             user_cloud.change_folder(value)
-            print(SELECTED_FOLDER)
             user_cloud.update_directory()
 
         if "back.x" in request.form or "back.y" in request.form:
             user_cloud.go_back()
-            print(SELECTED_FOLDER)
             user_cloud.update_directory()
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
+            print(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            print(path)
             try:
                 if not os.path.exists(path):
                     print_d("NEW FOLDER " + value + " PATH " + path)
@@ -407,7 +391,6 @@ def cloud():
 
         if "file_upload" in request.files:
             files = request.files.getlist('file_upload')
-            print(files)
 
             if len(files) < 1:
                 flash("No selected files")
@@ -458,7 +441,6 @@ def cloud():
                 if not os.path.exists(d_file):
                     print_d("SAVE FOLDER " + s_file + " PATH " + d_file)
                     f.save(d_file)
-                print("##########")
 
             user_cloud.update_directory()
         
@@ -481,7 +463,6 @@ def cloud():
         if "edit" in request.form:
             target, value = request.form["edit"].split(",")
             value = value
-            print(target + value)
             #Check if folder or file
             checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
             try:

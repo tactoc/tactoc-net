@@ -7,24 +7,22 @@ db = SQLAlchemy()
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile("config.py")
 
-try:
-    if not path.exists(app.config['MEDIA_FOLDER']):
-        mkdir(app.config['MEDIA_FOLDER'])
-        print("Created /media")
+if not path.exists(app.config['MEDIA_FOLDER']):
+    mkdir(app.config['MEDIA_FOLDER'])
+    print("Created /media")
 
-    if not path.exists(app.config['TACTOCNET_FOLDER']):
-        mkdir(app.config['TACTOCNET_FOLDER'])
-        print("Created /media/tactocnet")
+if not path.exists(app.config['TACTOCNET_FOLDER']):
+    mkdir(app.config['TACTOCNET_FOLDER'])
+    print("Created /media/tactocnet")
 
-    if not path.exists(app.config['UPLOADS_FOLDER']):
-        mkdir(app.config['UPLOADS_FOLDER'])
-        print("Created /media/tactocnet/uploads")
+if not path.exists(app.config['UPLOADS_FOLDER']):
+    mkdir(app.config['UPLOADS_FOLDER'])
+    print("Created /media/tactocnet/uploads")
 
-    if not path.exists(app.config['CLOUD_FOLDER']):
-        mkdir(app.config['CLOUD_FOLDER'])
-        print("Created /media/tactocnet/cloud")
-except Exception as e:
-    print(e)
+if not path.exists(app.config['CLOUD_FOLDER']):
+    mkdir(app.config['CLOUD_FOLDER'])
+    print("Created /media/tactocnet/cloud")
+
 
 db.init_app(app)
 
