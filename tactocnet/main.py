@@ -11,16 +11,14 @@ from .models import Users
 
 main = Blueprint("main", __name__)
 
-DEBUG_PRINT = True
-
 def print_d(s):
-    if DEBUG_PRINT:
+    if app.config["DEBUG_PRINT"]:
         print(s)
-print
+print_d
 
 def path_join(*args):
     path = ""
-    print(args)
+    print_d(args)
     for i in args:
         if isinstance(i, str):
             path = os.path.join(path, i)
@@ -377,9 +375,9 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            print(value)
+            print_d(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-            print(path)
+            print_d(path)
             try:
                 if not os.path.exists(path):
                     print_d("NEW FOLDER " + value + " PATH " + path)
