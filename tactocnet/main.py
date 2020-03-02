@@ -30,7 +30,6 @@ def path_join(*args):
 
     return path
 
-
 @main.route("/")
 def index():
     return redirect(url_for("main.cloud"))
@@ -394,23 +393,25 @@ def cloud():
                 return redirect(url_for("main.cloud"))
             #save file
             for i in files:
-                f = i.filename
-                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
-                if not os.path.exists(path):
-                    path = Markup.escape(path)
-                    i.save(path)
-                    print_d("SAVE FILE " + f + " PATH " + path)
-                    #Check if size is appropitate
-                    f_size = os.stat(path).st_size
-                    storage_max         = current_user.storagelimit
-                    storage_used        = user_cloud.get_storage_bytes()
-                    storage_available   = storage_max - storage_used
-                    if not f_size >= storage_available:
-                        flash("Saved ",f)
-                    else:
-                        
-                        os.remove(path)
-                        flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
+                try:
+                    f = i.filename
+                    path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
+                    if not os.path.exists(path):
+                        i.save(path)
+                        print_d("SAVE FILE " + f + " PATH " + path)
+                        #Check if size is appropitate
+                        f_size = os.stat(path).st_size
+                        storage_max         = current_user.storagelimit
+                        storage_used        = user_cloud.get_storage_bytes()
+                        storage_available   = storage_max - storage_used
+                        if not f_size >= storage_available:
+                            flash("Saved ",f)
+                        else:
+                            
+                            os.remove(path)
+                            flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
+                except Exception as e:
+                    print(e)
 
             user_cloud.update_directory()
         
