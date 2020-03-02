@@ -13,18 +13,16 @@ main = Blueprint("main", __name__)
 
 def path_join(*args):
     path = ""
+    print(args)
     for i in args:
         if isinstance(i, str):
-            if i == args[-1]:
-                ext = os.path.splitext(i)
-                if not ext[1] == "":
-                    path = path + i
-                    break
-            else:
-                path = path + i + os.sep
-        if isinstance(i, list):
+            path = os.path.join(path, i)
+        if isinstance(i,list):
             for y in i:
-                path = path + y + os.sep
+                path = os.path.join(path,y)
+    #fix slashes
+    path = path.replace("\\","/")
+
     return path
 
 
@@ -372,7 +370,9 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
+            print(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            print(path)
             try:
                 if not os.path.exists(path):
                     os.mkdir(path)
