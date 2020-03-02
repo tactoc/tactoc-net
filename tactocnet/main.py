@@ -11,14 +11,14 @@ from .models import Users
 
 main = Blueprint("main", __name__)
 
+DEBUG_PRINT = True
+
 def print_d(s):
     if app.config["DEBUG_PRINT"]:
-        print(s)
-print_d
+        print(current_user.username.upper() + " | " + s)
 
 def path_join(*args):
     path = ""
-    print_d(args)
     for i in args:
         if isinstance(i, str):
             path = os.path.join(path, i)
@@ -375,16 +375,15 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            print_d(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-            print_d(path)
             try:
                 if not os.path.exists(path):
                     print_d("NEW FOLDER " + value + " PATH " + path)
                     os.mkdir(path)
                     flash("Created ", value)
                     user_cloud.update_directory()
-            except:
+            except Exception as e:
+                print_d(e)
                 flash(value + " is not a valid folder name!")
 
         if "file_upload" in request.files:
@@ -400,6 +399,7 @@ def cloud():
                 if not os.path.exists(path):
                     path = Markup.escape(path)
                     i.save(path)
+                    print_d("SAVE FILE " + f + " PATH " + path)
                     #Check if size is appropitate
                     f_size = os.stat(path).st_size
                     storage_max         = current_user.storagelimit
@@ -408,7 +408,7 @@ def cloud():
                     if not f_size >= storage_available:
                         flash("Saved ",f)
                     else:
-                        print_d("SAVE FILE " + f + " PATH " + path)
+                        
                         os.remove(path)
                         flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
 
