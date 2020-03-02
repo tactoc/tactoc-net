@@ -5,8 +5,8 @@ SQLALCHEMY_DATABASE_URI         = 'sqlite:///db.sqlite3'
 SQLALCHEMY_TRACK_MODIFICATIONS  = True
 MAX_CONTENT_LENGTH              = 10 * 1024 * 1024 * 1024 # 10 gb max
 
-MEDIA_FOLDER                    = '/media'
-TACTOCNET_FOLDER                = '/media/tactocnet'
-UPLOADS_FOLDER                   = '/media/tactocnet/uploads'
-CLOUD_FOLDER                    = '/media/tactocnet/cloud'
+MEDIA_FOLDER                    = '/home/pi/media'
+TACTOCNET_FOLDER                = '/home/pi/media/tactocnet'
+UPLOADS_FOLDER                   = '/home/pi/media/tactocnet/uploads'
+CLOUD_FOLDER                    = '/home/pi/media/tactocnet/cloud'
 
