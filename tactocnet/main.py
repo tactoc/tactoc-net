@@ -12,6 +12,13 @@ from .models import Users
 
 main = Blueprint("main", __name__)
 
+DEBUG_PRINT = True
+
+def print_d(s):
+    if DEBUG_PRINT:
+        print(s)
+print
+
 def path_join(*args):
     path = ""
     for i in args:
@@ -391,6 +398,7 @@ def cloud():
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
             try:
                 if not os.path.exists(path):
+                    print_d("NEW FOLDER " + value + " PATH " + path)
                     os.mkdir(path)
                     flash("Created ", value)
                     user_cloud.update_directory()
@@ -419,6 +427,7 @@ def cloud():
                     if not f_size >= storage_available:
                         flash("Saved ",f)
                     else:
+                        print_d("SAVE FILE " + f + " PATH " + path)
                         os.remove(path)
                         flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
 
@@ -432,7 +441,6 @@ def cloud():
                 return redirect(url_for("main.cloud"))
 
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
-            print(folder_upload)
             #main folder
             for f in folder_upload:
                 s_file                = f.filename
@@ -442,14 +450,13 @@ def cloud():
                     flash("Folders containing ' is not allowed")
                     break
                 
-                print(s_file)
-                print(s_directories)
                 #Create all directories
                 for i in s_directories:
-                    if not os.path.exists(path_join(path, *s_directories)):
-                        os.makedirs(path_join(path, *s_directories))
+                    if not os.path.exists(path_join(path, s_directories)):
+                        os.makedirs(path_join(path, s_directories))
                 #Save all files
                 if not os.path.exists(d_file):
+                    print_d("SAVE FOLDER " + s_file + " PATH " + d_file)
                     f.save(d_file)
                 print("##########")
 
@@ -466,6 +473,7 @@ def cloud():
                 if os.path.isfile(path_to_file):
                     os.remove(path_to_file)
             else:
+                print_d("DELETE " + value + " PATH " + path_to_file)
                 os.remove(path_to_file)
             user_cloud.update_directory()
             flash("Removed " + value)
@@ -478,9 +486,11 @@ def cloud():
             checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
             try:
                 if checker[1] == "":
+                    print_d("EDIT: TARGET " + target + " VALUE " + value)
                     os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
                 else:
                     value = value + checker[1]
+                    print_d("EDIT TARGET " + target + " VALUE " + value)
                     os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
             except Exception as e:
                 flash(value + " is not a valid name!")
@@ -489,6 +499,7 @@ def cloud():
         if "zip_folder" in request.form:
             value = request.form["zip_folder"]
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            print_d("ZIP " + value + " " + path)
             memory_file = user_cloud.zip_folder(path)
             foldername = value + ".zip"
             return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
