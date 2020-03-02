@@ -285,7 +285,10 @@ class Cloud(object):
                     fp = path_join(dirpath, f)
 
                     if not os.path.islink(fp):
-                        total_size += os.path.getsize(fp)
+                        try:
+                            total_size += os.path.getsize(fp)
+                        except Exception as e:
+                            print(e)
             return self.parse_bytes(total_size)
         return self.parse_bytes(fileinfo.st_size)
 
