@@ -11,9 +11,14 @@ from .models import Users
 
 main = Blueprint("main", __name__)
 
+DEBUG_PRINT = True
+
+def print_d(s):
+    if app.config["DEBUG_PRINT"]:
+        print(current_user.username.upper() + " | " + s)
+
 def path_join(*args):
     path = ""
-    print(args)
     for i in args:
         if isinstance(i, str):
             path = os.path.join(path, i)
@@ -22,9 +27,8 @@ def path_join(*args):
                 path = os.path.join(path,y)
     #fix slashes
     path = path.replace("\\","/")
-
+    print_d(path)
     return path
-
 
 @main.route("/")
 def index():
@@ -370,15 +374,15 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            print(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-            print(path)
             try:
                 if not os.path.exists(path):
+                    print_d("NEW FOLDER " + value + " PATH " + path)
                     os.mkdir(path)
                     flash("Created ", value)
                     user_cloud.update_directory()
-            except:
+            except Exception as e:
+                print_d(e)
                 flash(value + " is not a valid folder name!")
 
         if "file_upload" in request.files:
@@ -392,8 +396,8 @@ def cloud():
                 f = i.filename
                 path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
                 if not os.path.exists(path):
-                    path = Markup.escape(path)
                     i.save(path)
+                    print_d("SAVE FILE " + f + " PATH " + path)
                     #Check if size is appropitate
                     f_size = os.stat(path).st_size
                     storage_max         = current_user.storagelimit
@@ -402,8 +406,10 @@ def cloud():
                     if not f_size >= storage_available:
                         flash("Saved ",f)
                     else:
+                        
                         os.remove(path)
                         flash("You can not exceed your ",user_cloud.parse_bytes(storage_max))
+
 
             user_cloud.update_directory()
         
@@ -430,6 +436,7 @@ def cloud():
                         os.makedirs(path_join(path, s_directories))
                 #Save all files
                 if not os.path.exists(d_file):
+                    print_d("SAVE FOLDER " + s_file + " PATH " + d_file)
                     f.save(d_file)
 
             user_cloud.update_directory()
@@ -445,6 +452,7 @@ def cloud():
                 if os.path.isfile(path_to_file):
                     os.remove(path_to_file)
             else:
+                print_d("DELETE " + value + " PATH " + path_to_file)
                 os.remove(path_to_file)
             user_cloud.update_directory()
             flash("Removed " + value)
@@ -456,9 +464,11 @@ def cloud():
             checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
             try:
                 if checker[1] == "":
+                    print_d("EDIT: TARGET " + target + " VALUE " + value)
                     os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
                 else:
                     value = value + checker[1]
+                    print_d("EDIT TARGET " + target + " VALUE " + value)
                     os.rename(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target), path_join(user_cloud.cloud_path, SELECTED_FOLDER, value))
             except Exception as e:
                 flash(value + " is not a valid name!")
@@ -467,6 +477,7 @@ def cloud():
         if "zip_folder" in request.form:
             value = request.form["zip_folder"]
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            print_d("ZIP " + value + " " + path)
             memory_file = user_cloud.zip_folder(path)
             foldername = value + ".zip"
             return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
