@@ -371,6 +371,7 @@ def cloud():
     user_cloud = Cloud()
     if request.method == "POST":
         print_d(request.form)
+        request.form = str(request.form).encode("utf-8")
         if "change_root" in request.form:
             SELECTED_FOLDER = [""]
             SELECTED_FOLDER[0] = current_user.username
