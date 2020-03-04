@@ -286,6 +286,7 @@ class Cloud(object):
             total_size = 0
             for dirpath, dirnames, filenames in os.walk(path):
                 for f in filenames:
+                    f = encode(f)
                     fp = path_join(dirpath, f)
 
                     if not os.path.islink(fp):
