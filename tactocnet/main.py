@@ -379,7 +379,7 @@ def cloud():
 
         if "change_folder" in request.form:
             value = request.form["change_folder"]
-            value = enc value
+            value = value
             user_cloud.change_folder(value)
             user_cloud.update_directory()
             print_d("CHANGE FOLDER" + value)
