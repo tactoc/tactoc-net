@@ -399,7 +399,7 @@ def cloud():
             #save file
             for i in files:
                 f = i.filename
-                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
+                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, str(f).encode("utf-8"))
                 print_d("FILE PATH " + path)
                 if not os.path.exists(path):
                     i.save(path)
