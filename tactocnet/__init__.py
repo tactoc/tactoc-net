@@ -1,4 +1,7 @@
-#!/bin/env python
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+import site
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request

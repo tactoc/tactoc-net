@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7 -S
 
 import sys
+reload(sys)
 sys.setdefaultencoding("utf-8")
 import site
 # -*- coding: utf-8 -*-
