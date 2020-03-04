@@ -25,7 +25,6 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
-
     path = ""
     for i in args:
         if isinstance(i, str):
