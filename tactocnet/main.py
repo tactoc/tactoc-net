@@ -436,7 +436,7 @@ def cloud():
                 if "&#39;" in d_file:
                     flash("Folders containing ' is not allowed")
                     break
-                
+                print_d("FOLDER DIRECTORIES " + s_directories)
                 #Create all directories
                 for i in s_directories:
                     if not os.path.exists(path_join(path, s_directories)):
