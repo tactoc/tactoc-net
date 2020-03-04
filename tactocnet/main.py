@@ -22,7 +22,7 @@ def print_d(s):
 
 def path_join(*args):
     for i in args:
-        print(i.upper())
+        print(str(i).upper())
     path = ""
     for i in args:
         if isinstance(i, str):
