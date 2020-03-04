@@ -19,9 +19,6 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 
-def encode(i):
-    return str(i).encode("utf-8")
-
 @main.route("/")
 def index():
     return redirect(url_for("main.cloud"))
@@ -367,7 +364,7 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            value = encode(value)
+            value = value
             path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
             print_d("NEW FOLDER PATH " + path)
             try:
@@ -389,7 +386,7 @@ def cloud():
                 return redirect(url_for("main.cloud"))
             #save file
             for i in files:
-                f = encode(i.filename)
+                f = i.filename
                 path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER)
                 print_d("FILE PATH " + path)
                 if not os.path.exists(path):
