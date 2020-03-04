@@ -358,6 +358,7 @@ def cloud():
     SELECTED_FOLDER[0] = current_user.username
     user_cloud = Cloud()
     if request.method == "POST":
+        print_d(request.form)
         if "change_root" in request.form:
             SELECTED_FOLDER = [""]
             SELECTED_FOLDER[0] = current_user.username
@@ -367,6 +368,7 @@ def cloud():
             value = request.form["change_folder"]
             user_cloud.change_folder(value)
             user_cloud.update_directory()
+            print_d("CHANGE FOLDER" + value)
 
         if "back.x" in request.form or "back.y" in request.form:
             user_cloud.go_back()
@@ -375,6 +377,7 @@ def cloud():
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            print_d("NEW FOLDER PATH" + path)
             try:
                 if not os.path.exists(path):
                     print_d("NEW FOLDER " + value + " PATH " + path)
@@ -387,6 +390,7 @@ def cloud():
 
         if "file_upload" in request.files:
             files = request.files.getlist('file_upload')
+            print_d("FILES" + str(files))
 
             if len(files) < 1:
                 flash("No selected files")
@@ -395,6 +399,7 @@ def cloud():
             for i in files:
                 f = i.filename
                 path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
+                print_d("FILE PATH " + path)
                 if not os.path.exists(path):
                     i.save(path)
                     print_d("SAVE FILE " + f + " PATH " + path)
@@ -415,12 +420,13 @@ def cloud():
         
         if "folders_upload" in request.files:
             folder_upload = request.files.getlist('folders_upload')
+            print_d("FOLDERS UPLOAD " + str(folder_upload))
             
-
             if folder_upload == "":
                 return redirect(url_for("main.cloud"))
 
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
+            print_d("FOLDER PATH " + path)
             #main folder
             for f in folder_upload:
                 s_file                = f.filename
@@ -443,7 +449,9 @@ def cloud():
         
         if "delete" in request.form:
             value = request.form["delete"]
+            print_d("DELETE VALUE " + value)
             path_to_file = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
+            print_d("DELETE PATH " + path_to_file)
             #Check if folder or file
             if os.path.splitext(path_to_file)[1] == "":
                 if os.path.isdir(path_to_file):
@@ -460,6 +468,7 @@ def cloud():
         if "edit" in request.form:
             target, value = request.form["edit"].split(",")
             value = value
+            print("EDIT " + target + " " + value)
             #Check if folder or file
             checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
             try:
