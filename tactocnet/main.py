@@ -389,7 +389,7 @@ def cloud():
             #save file
             for i in files:
                 f = i.filename
-                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER)
+                path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, f)
                 print_d("FILE PATH " + path)
                 if not os.path.exists(path):
                     i.save(path)
