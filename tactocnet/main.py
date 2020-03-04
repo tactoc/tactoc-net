@@ -27,6 +27,7 @@ def path_join(*args):
                 path = os.path.join(path,y)
     #fix slashes
     path = path.replace("\\","/")
+    path = str(path).encode("utf-8")
     print_d(path)
     return path
 
@@ -486,7 +487,7 @@ def cloud():
         if "zip_folder" in request.form:
             value = request.form["zip_folder"]
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-            print_d("ZIP " + value + " " + path)
+            print_d("ZIP " + str(value) + " " + path)
             memory_file = user_cloud.zip_folder(path)
             foldername = value + ".zip"
             return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
