@@ -27,7 +27,6 @@ def path_join(*args):
                 path = os.path.join(path,y)
     #fix slashes
     path = path.replace("\\","/")
-    path = str(path).encode("utf-8")
     print_d(path)
     return path
 
@@ -194,9 +193,6 @@ def download_upload(filename):
     return send_from_directory(directory=uploads, filename=filename)
 
 
-
-
-
 SELECTED_FOLDER = [""]
 
 class Cloud(object):
@@ -293,7 +289,7 @@ class Cloud(object):
 
 
     def change_folder(self, value):
-        if not value == SELECTED_FOLDER[-1]:
+        if not value == SELECTED_FOLDER[0]:
             SELECTED_FOLDER.append(value)
     
     def get_folder(self):
