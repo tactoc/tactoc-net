@@ -26,6 +26,10 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
+    for i in args:
+        print(str(i).upper(), end="")
+    print()
+
     path = ""
     for i in args:
         if isinstance(i, str):
@@ -293,10 +297,7 @@ class Cloud(object):
                     print(fp.upper())
 
                     if not os.path.islink(fp):
-                        try:
-                            total_size += os.path.getsize(fp)
-                        except:
-                            print("FUCK")
+                        total_size += os.path.getsize(fp)
             return self.parse_bytes(total_size)
         return self.parse_bytes(fileinfo.st_size)
 
