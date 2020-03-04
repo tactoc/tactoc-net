@@ -30,7 +30,6 @@ def path_join(*args):
         if isinstance(i,list):
             for y in i:
                 path = os.path.join(path,y)
-        path = path + i 
         
     print_d(path)
     return path
