@@ -43,7 +43,7 @@ def path_join(*args):
     return path
 
 def encode(i):
-    return str(i).encode("utf-8ss")
+    return str(i).encode("utf-8")
 
 @main.route("/")
 def index():
