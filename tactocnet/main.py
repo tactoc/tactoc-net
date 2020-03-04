@@ -21,6 +21,8 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
+    for i in args:
+        print(i.upper())
     path = ""
     for i in args:
         if isinstance(i, str):
@@ -28,8 +30,8 @@ def path_join(*args):
         if isinstance(i,list):
             for y in i:
                 path = os.path.join(path,y)
-    #fix slashes
-    path = path.replace("\\","/")
+        path = path + i 
+        
     print_d(path)
     return path
 
@@ -398,7 +400,7 @@ def cloud():
             #save file
             for i in files:
                 f = i.filename
-                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, f)
+                path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
                 print_d("FILE PATH " + path)
                 if not os.path.exists(path):
                     i.save(path)
