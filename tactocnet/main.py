@@ -27,7 +27,6 @@ def path_join(*args):
                 path = os.path.join(path,y)
     #fix slashes
     path = path.replace("\\","/")
-    path = str(path).encode("utf-8")
     print_d(path)
     return path
 

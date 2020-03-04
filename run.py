@@ -13,8 +13,14 @@ if __name__ == "__main__":
         args["port"]       = 443
 
     if  "-l" in argv:
-        args["host"]        = "localhost"
+        if not "-ip" in argv:
+            args["host"]        = "localhost"
     if "-d" in argv:
         args["debug"]       = True
+
+    if "-ip" in argv:
+        if not "-l" in argv:
+            args["host"] = "0.0.0.0"
+
 
     app.run(**args)
