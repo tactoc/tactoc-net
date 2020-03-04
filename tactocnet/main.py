@@ -1,4 +1,8 @@
-#!/bin/env python
+#!/usr/bin/python2.7 -S
+
+import sys
+sys.setdefaultencoding("utf-8")
+import site
 # -*- coding: utf-8 -*-
 
 from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
@@ -21,21 +25,20 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
-    for i in args:
-        print(str(i).upper())
+
     path = ""
     for i in args:
         if isinstance(i, str):
             path = os.path.join(path, i)
         if isinstance(i,list):
             for y in i:
+                y = y
                 path = os.path.join(path,y)
         
     print_d(path)
     return path
 
-def encode(i):
-    return str(i).encode("utf-8")
+
 
 @main.route("/")
 def index():
@@ -286,7 +289,7 @@ class Cloud(object):
             total_size = 0
             for dirpath, dirnames, filenames in os.walk(path):
                 for f in filenames:
-                    f = encode(f)
+                    f = f
                     fp = path_join(dirpath, f)
 
                     if not os.path.islink(fp):
@@ -371,7 +374,7 @@ def cloud():
 
         if "change_folder" in request.form:
             value = request.form["change_folder"]
-            value = encode(value)
+            value = value
             user_cloud.change_folder(value)
             user_cloud.update_directory()
             print_d("CHANGE FOLDER" + value)
@@ -382,7 +385,7 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            value = encode(value)
+            value = value
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
             print_d("NEW FOLDER PATH" + path)
             try:
@@ -404,7 +407,7 @@ def cloud():
                 return redirect(url_for("main.cloud"))
             #save file
             for i in files:
-                f = encode(i.filename)
+                f = i.filename
                 path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
                 print_d("FILE PATH " + path)
                 if not os.path.exists(path):
@@ -436,7 +439,7 @@ def cloud():
             print_d("FOLDER PATH " + path)
             #main folder
             for f in folder_upload:
-                s_file                = encode(f.filename)
+                s_file                = f.filename
                 s_directories         = os.path.dirname(s_file).split("/")
                 d_file                = path_join(path, s_file).replace("\\","/")
                 if "&#39;" in d_file:
@@ -457,7 +460,7 @@ def cloud():
         
         if "delete" in request.form:
             value = request.form["delete"]
-            value = encode(value)
+            value = value
             print_d("DELETE VALUE " + value)
             path_to_file = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
             print_d("DELETE PATH " + path_to_file)
@@ -476,7 +479,7 @@ def cloud():
 
         if "edit" in request.form:
             target, value = request.form["edit"].split(",")
-            value = encode(value)
+            value = value
             print("EDIT " + target + " " + value)
             #Check if folder or file
             checker = os.path.splitext(path_join(user_cloud.cloud_path, SELECTED_FOLDER, target))
@@ -494,7 +497,7 @@ def cloud():
     
         if "zip_folder" in request.form:
             value = request.form["zip_folder"]
-            value = encode(value)
+            value = value
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
             print_d("ZIP " + str(value) + " " + path)
             memory_file = user_cloud.zip_folder(path)

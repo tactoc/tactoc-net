@@ -1,4 +1,8 @@
-#!/bin/env python
+#!/usr/bin/python2.7 -S
+
+import sys
+sys.setdefaultencoding("utf-8")
+import site
 # -*- coding: utf-8 -*-
 
 from . import db
