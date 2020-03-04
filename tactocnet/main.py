@@ -289,8 +289,8 @@ class Cloud(object):
             total_size = 0
             for dirpath, dirnames, filenames in os.walk(path):
                 for f in filenames:
-                    f = f
                     fp = path_join(dirpath, f)
+                    print(fp.upper())
 
                     if not os.path.islink(fp):
                         total_size += os.path.getsize(fp)
