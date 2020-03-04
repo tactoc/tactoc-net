@@ -14,10 +14,6 @@ from .models import Users
 
 main = Blueprint("main", __name__)
 
-DEBUG_PRINT = True
-
-SELECTED_FOLDER
-
 def print_d(s):
     if app.config["DEBUG_PRINT"]:
         print(current_user.username.upper() + " | " + str(s))
