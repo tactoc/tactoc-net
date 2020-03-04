@@ -21,7 +21,6 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
-    print()
     print("######")
     for i in args:
         print(str(i).upper(),)
@@ -39,7 +38,7 @@ def path_join(*args):
             path = os.path.join(i)
         
     print_d(path)
-    print()
+    print("#########")
     return path
 
 def encode(i):
@@ -392,7 +391,7 @@ def cloud():
             value = request.form["newfoldername"]
             value = encode(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
-            print_d("NEW FOLDER PATH" + path)
+            print_d("NEW FOLDER PATH " + path)
             try:
                 if not os.path.exists(path):
                     print_d("NEW FOLDER " + value + " PATH " + path)
