@@ -27,7 +27,7 @@ def print_d(s):
 
 def path_join(*args):
     for i in args:
-        print(str(i).upper(), end="")
+        print(str(i).upper(), end=' ')
     print()
 
     path = ""
