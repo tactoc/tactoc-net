@@ -15,7 +15,7 @@ DEBUG_PRINT = True
 
 def print_d(s):
     if app.config["DEBUG_PRINT"]:
-        print(current_user.username.upper() + " | " + s)
+        print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
     path = ""
