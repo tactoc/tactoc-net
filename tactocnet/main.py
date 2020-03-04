@@ -460,18 +460,17 @@ def cloud():
 
         if "edit" in request.form:
             target, value = request.form["edit"].split(",")
-            value = value
             print("EDIT " + target + " " + value)
             #Check if folder or file
             checker = os.path.splitext(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target))
             try:
                 if checker[1] == "":
                     print_d("EDIT: TARGET " + target + " VALUE " + value)
-                    os.rename(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target), os.path.join(user_cloud.cloud_path, SELECTED_FOLDER, value))
+                    os.rename(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target), os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value))
                 else:
                     value = value + checker[1]
                     print_d("EDIT TARGET " + target + " VALUE " + value)
-                    os.rename(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target), os.path.join(user_cloud.cloud_path, SELECTED_FOLDER, value))
+                    os.rename(os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, target), os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value))
             except Exception as e:
                 flash(value + " is not a valid name!")
             user_cloud.update_directory()
