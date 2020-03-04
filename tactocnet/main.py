@@ -35,7 +35,7 @@ def path_join(*args):
                 y = y
                 path = os.path.join(path,y)
         else:
-            path = os.path.join(i)
+            path = os.path.join(path,i)
         
     print_d(path)
     print("#########")
