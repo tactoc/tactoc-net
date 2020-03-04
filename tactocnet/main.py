@@ -1,9 +1,4 @@
-#!/usr/bin/python2.7 -S
-
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
-import site
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
@@ -26,6 +21,7 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
+    print()
     print("######")
     for i in args:
         print(str(i).upper(),)
@@ -43,6 +39,7 @@ def path_join(*args):
             path = os.path.join(i)
         
     print_d(path)
+    print()
     return path
 
 def encode(i):

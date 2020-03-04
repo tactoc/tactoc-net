@@ -1,9 +1,4 @@
-#!/usr/bin/python2.7 -S
-
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
-import site
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 from flask import Flask,Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
