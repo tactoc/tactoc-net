@@ -293,7 +293,10 @@ class Cloud(object):
                     print(fp.upper())
 
                     if not os.path.islink(fp):
-                        total_size += os.path.getsize(fp)
+                        try:
+                            total_size += os.path.getsize(fp)
+                        except:
+                            print("FUCK")
             return self.parse_bytes(total_size)
         return self.parse_bytes(fileinfo.st_size)
 
