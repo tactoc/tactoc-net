@@ -37,6 +37,7 @@ def path_join(*args):
         
     print_d(path)
     print("-------------------------------")
+    print
     return path
 
 def encode(i):
@@ -409,7 +410,7 @@ def cloud():
                 return redirect(url_for("main.cloud"))
             #save file
             for i in files:
-                f = i.filename
+                f = encode(i.filename)
                 path = path_join(user_cloud.cloud_path, SELECTED_FOLDER)
                 print_d("FILE PATH " + path)
                 if not os.path.exists(path):
