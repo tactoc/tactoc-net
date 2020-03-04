@@ -1,3 +1,6 @@
+#!/bin/env python
+# -*- coding: utf-8 -*-
+
 from tactocnet import app
 from sys import argv
 
