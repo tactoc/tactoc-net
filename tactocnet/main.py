@@ -430,8 +430,8 @@ def cloud():
                 print_d("FOLDER FILE " + d_file)
                 #Create all directories
                 for i in s_directories:
-                    if not os.path.exists(os.path.join(path, s_directories)):
-                        os.makedirs(os.path.join(path, s_directories))
+                    if not os.path.exists(os.path.join(path, *s_directories)):
+                        os.makedirs(os.path.join(path, *s_directories))
                 #Save all files
                 if not os.path.exists(d_file):
                     print_d("SAVE FOLDER " + s_file + " PATH " + d_file)
