@@ -42,7 +42,8 @@ def path_join(*args):
     print_d(path)
     return path
 
-
+def encode(i):
+    return str(i).encode("utf-8ss")
 
 @main.route("/")
 def index():
@@ -371,7 +372,6 @@ def cloud():
     user_cloud = Cloud()
     if request.method == "POST":
         print_d(request.form)
-        request.form = str(request.form).encode("utf-8")
         if "change_root" in request.form:
             SELECTED_FOLDER = [""]
             SELECTED_FOLDER[0] = current_user.username
@@ -379,7 +379,7 @@ def cloud():
 
         if "change_folder" in request.form:
             value = request.form["change_folder"]
-            value = value
+            value = enc value
             user_cloud.change_folder(value)
             user_cloud.update_directory()
             print_d("CHANGE FOLDER" + value)
@@ -390,7 +390,7 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            value = value
+            value = encode(value)
             path = path_join(user_cloud.cloud_path, SELECTED_FOLDER, value)
             print_d("NEW FOLDER PATH" + path)
             try:
