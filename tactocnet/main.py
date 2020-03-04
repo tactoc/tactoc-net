@@ -21,7 +21,7 @@ def print_d(s):
         print(current_user.username.upper() + " | " + str(s))
 
 def path_join(*args):
-    print("######")
+    print("-------------------------------")
     for i in args:
         print(str(i).upper(),)
     print()
@@ -34,11 +34,9 @@ def path_join(*args):
             for y in i:
                 y = y
                 path = os.path.join(path,y)
-        else:
-            path = os.path.join(path,i)
         
     print_d(path)
-    print("#########")
+    print("-------------------------------")
     return path
 
 def encode(i):
