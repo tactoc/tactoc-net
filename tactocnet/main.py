@@ -14,8 +14,6 @@ from .models import Users
 
 main = Blueprint("main", __name__)
 
-DEBUG_PRINT = True
-
 def print_d(s):
     if app.config["DEBUG_PRINT"]:
         print(current_user.username.upper() + " | " + str(s))
@@ -281,8 +279,7 @@ class Cloud(object):
 
 
     def change_folder(self, value):
-        if not value == SELECTED_FOLDER[0]:
-            SELECTED_FOLDER.append(value)
+        SELECTED_FOLDER.append(value)
     
     def get_folder(self):
         return SELECTED_FOLDER[-1]
