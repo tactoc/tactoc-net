@@ -341,6 +341,7 @@ class Cloud(object):
 def cloud():
     global SELECTED_FOLDER
     SELECTED_FOLDER[0] = current_user.username
+    print_d(SELECTED_FOLDER)
     user_cloud = Cloud()
     if request.method == "POST":
         print_d(request.form)
