@@ -333,7 +333,7 @@ class Cloud(object):
             for root, dirs, files in os.walk(path):
 
                 for f in files:
-                    dir_path = os.path.split(root, f)[-1]
+                    dir_path = os.path.split(os.path.join(root,f))[-1]
                     
                     zipf.write(os.path.join(root,f), os.path.join(dir_path, f))
         memory_zip.seek(0)
