@@ -277,10 +277,11 @@ class Cloud(object):
 
 
     def change_folder(self, value):
-        try:
-            SELECTED_FOLDER.append(value)
-        except:
-            pass
+        #If value is valid change folder
+        if not len(SELECTED_FOLDER) == 1:
+            if value in self.get_files()[0][1]:
+                SELECTED_FOLDER.append(value)
+
     
     def get_folder(self):
         return SELECTED_FOLDER[-1]
