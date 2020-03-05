@@ -331,10 +331,9 @@ class Cloud(object):
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(path):
-                dir_path = root.split(i + "/")[1]
 
                 for f in files:
-                    zipf.write(os.path.join(root,f), os.path.join(dir_path, f))
+                    zipf.write(os.path.join(root,f), os.path.join(i, f))
         memory_zip.seek(0)
         return memory_zip
 
@@ -474,9 +473,7 @@ def cloud():
     
         if "zip_folder" in request.form:
             value = request.form["zip_folder"]
-            path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
-            print_d("ZIP " + str(value) + " " + path)
-            memory_file = user_cloud.zip_folder(path)
+            memory_file = user_cloud.zip_folder(value)
             foldername = value + ".zip"
             return send_file(memory_file, attachment_filename=foldername, as_attachment=True)
     
