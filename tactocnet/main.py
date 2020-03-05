@@ -269,8 +269,6 @@ class Cloud(object):
             for dirpath, dirnames, filenames in os.walk(path):
                 for f in filenames:
                     fp = os.path.join(dirpath, f)
-                    print(fp.upper())
-
                     if not os.path.islink(fp):
                         total_size += os.path.getsize(fp)
             return self.parse_bytes(total_size)
@@ -353,7 +351,6 @@ def cloud():
 
         if "change_folder" in request.form:
             value = request.form["change_folder"]
-            value = value
             user_cloud.change_folder(value)
             user_cloud.update_directory()
             print_d("CHANGE FOLDER" + value)
@@ -364,7 +361,6 @@ def cloud():
 
         if "newfoldername" in request.form:
             value = request.form["newfoldername"]
-            value = value
             path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
             print_d("NEW FOLDER PATH " + path)
             try:
@@ -439,7 +435,6 @@ def cloud():
         
         if "delete" in request.form:
             value = request.form["delete"]
-            value = value
             print_d("DELETE VALUE " + value)
             path_to_file = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
             print_d("DELETE PATH " + path_to_file)
@@ -475,7 +470,6 @@ def cloud():
     
         if "zip_folder" in request.form:
             value = request.form["zip_folder"]
-            value = value
             path = os.path.join(user_cloud.cloud_path, *SELECTED_FOLDER, value)
             print_d("ZIP " + str(value) + " " + path)
             memory_file = user_cloud.zip_folder(path)
