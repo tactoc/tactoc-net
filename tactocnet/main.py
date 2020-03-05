@@ -277,7 +277,7 @@ class Cloud(object):
 
 
     def change_folder(self, value):
-        if len(SELECTED_FOLDER) > 1:
+        if not len(SELECTED_FOLDER) == 1:
             try:
                 SELECTED_FOLDER.append(value)
             except:
