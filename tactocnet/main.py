@@ -279,8 +279,9 @@ class Cloud(object):
     def change_folder(self, value):
         #If value is valid change folder
         if not len(SELECTED_FOLDER) == 1:
-            if value in self.get_files()[0][1]:
-                SELECTED_FOLDER.append(value)
+            for i in self.get_files():
+                if value == i:
+                    print("A VALID FOLDER")
 
     
     def get_folder(self):
@@ -299,6 +300,8 @@ class Cloud(object):
         for i in generator:
             files.append(i)
         return files
+
+
 
     def has_files(self):
         generator = os.listdir(os.path.join(self.cloud_path, *SELECTED_FOLDER))
