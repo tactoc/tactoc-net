@@ -277,8 +277,7 @@ class Cloud(object):
 
 
     def change_folder(self, value):
-        if len(SELECTED_FOLDER) == 1 and SELECTED_FOLDER[0] == current_user.username:
-            SELECTED_FOLDER.append(value)
+        SELECTED_FOLDER.append(value)
     
     def get_folder(self):
         return SELECTED_FOLDER[-1]
