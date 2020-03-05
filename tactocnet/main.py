@@ -331,11 +331,16 @@ class Cloud(object):
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(path):
-
                 for f in files:
-                    dir_name = os.path.split(os.path.join(root,f))[0].split("/")[-1]
+                    dirname = ""
+                    root_l = root.split("/")
+                    for index,y in enumerate(root_l):
+                        if y == i:
+                            dirname = dirname + "/".join(root_l[index:])
+
                     
-                    zipf.write(os.path.join(root,f), os.path.join(dir_name, f))
+                    
+                    zipf.write(os.path.join(root,f), os.path.join(dirname, f))
         memory_zip.seek(0)
         return memory_zip
 
