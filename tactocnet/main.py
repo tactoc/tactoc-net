@@ -278,10 +278,10 @@ class Cloud(object):
 
     def change_folder(self, value):
         #If value is valid change folder
-        for i in self.get_files()[0][1]:
-            print(i)
-            if value == i:
-                print("A VALID FOLDER")
+        if SELECTED_FOLDER[0] == current_user.username:
+            if value in self.get_files()[0][1]:
+                SELECTED_FOLDER.append(value)
+
 
     
     def get_folder(self):
