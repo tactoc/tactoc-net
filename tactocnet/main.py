@@ -331,7 +331,7 @@ class Cloud(object):
 
         with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(path):
-                dir_path = root.split(self.username + "/")[1]
+                dir_path = root.split(i + "/")[1]
 
                 for f in files:
                     zipf.write(os.path.join(root,f), os.path.join(dir_path, f))
