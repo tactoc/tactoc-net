@@ -225,7 +225,7 @@ class Cloud(object):
 
     def parse_filename(self,i, typ):
         file_path = os.path.join(self.cloud_path, *SELECTED_FOLDER, i)
-        cut = 14
+        cut = 12
         if len(i) > cut:
             if typ == 0:
                 return i[:cut]
