@@ -190,9 +190,10 @@ class Cloud(object):
         self.username           = current_user.username
         self.storagelimit       = current_user.storagelimit
         self.cloud_path         = app.config["CLOUD_FOLDER"]
-        ##check if folder exists
-        if not os.path.exists(os.path.join(self.cloud_path, *SELECTED_FOLDER)):
-            os.mkdir(os.path.join(self.cloud_path, *SELECTED_FOLDER))
+        ##check if user folder folder exists
+        self.user_root = os.path.join(self.cloud_path, self.username)
+        if not os.path.exists(self.user_root):
+            os.mkdir(self.user_root)
         self.files              = self.get_files()
 
         
