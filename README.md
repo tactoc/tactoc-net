@@ -1,6 +1,7 @@
 # Private-Cloud-Service
 A project i made since i wanted my own personal cloud server. You can run it on a VPS or your own Raspberry pi.
 Dependencies: flask, flask_sqlalchemy, flask_login
+the run.py module makes it easy to start the server, it accepts arguments as -d (Debug) -l (Localhost) -ssl (port 443)
 
 You can register and login and see your authenticated files and folders. All of the data from the users is stored in a 
 root folder at /media/pcs/ where there is two folders. There is a cloud folder and uploads folder. 
