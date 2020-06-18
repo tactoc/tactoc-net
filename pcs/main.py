@@ -8,7 +8,6 @@ import zipfile
 import ntpath
 from io import BytesIO
 from . import app, db
-from .models import Mails
 from .models import Users
 
 main = Blueprint("main", __name__)
