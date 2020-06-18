@@ -1,6 +1,6 @@
 # Private-Cloud-Service
 A project i made since i wanted my own personal cloud server. You can run it on a VPS or your own Raspberry pi.
-Dependencies: `flask, flask_sqlalchemy, flask_login`
+Dependencies: `flask, flask_sqlalchemy, flask_login`<br>
 the run.py module makes it easy to start the server,<br>
 it accepts arguments as -d (Debug) -l (Localhost) -ssl (port 443)
 Example: `python run.py -l -d`
