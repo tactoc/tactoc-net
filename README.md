@@ -25,3 +25,7 @@ you can do it with this command SQL"UPDATE users SET permission_level=1 where id
 
 
 Be aware it lacks comments in some places, but hope it is somewhat understandable.
+
+# Screenshots
+![1](https://i.imgur.com/zHBasax.png)
+![2](https://i.imgur.com/Xrl1X3k.png)
