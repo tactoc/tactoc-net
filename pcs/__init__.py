@@ -14,17 +14,17 @@ if not path.exists(app.config['MEDIA_FOLDER']):
     mkdir(app.config['MEDIA_FOLDER'])
     print("Created /media")
 
-if not path.exists(app.config['TACTOCNET_FOLDER']):
-    mkdir(app.config['TACTOCNET_FOLDER'])
-    print("Created /media/tactocnet")
+if not path.exists(app.config['PCS_FOLDER']):
+    mkdir(app.config['PCS_FOLDER'])
+    print("Created /media/pcs")
 
 if not path.exists(app.config['UPLOADS_FOLDER']):
     mkdir(app.config['UPLOADS_FOLDER'])
-    print("Created /media/tactocnet/uploads")
+    print("Created /media/pcs/uploads")
 
 if not path.exists(app.config['CLOUD_FOLDER']):
     mkdir(app.config['CLOUD_FOLDER'])
-    print("Created /media/tactocnet/cloud")
+    print("Created /media/pcs/cloud")
 
 
 db.init_app(app)

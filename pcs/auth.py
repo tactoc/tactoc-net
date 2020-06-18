@@ -42,12 +42,9 @@ def signup_post():
     email = request.form.get("email").lower()
     username = request.form.get("username").lower()
     password = request.form.get("password")
-    uniquecode = request.form.get("uniquecode")
-
 
     user_email      = Users.query.filter_by(email=email).first()
     user_username   = Users.query.filter_by(username=username).first()
-    code = Codes.query.filter_by(code=uniquecode).first()
 
     #check email
     regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
@@ -70,10 +67,8 @@ def signup_post():
     if user_username:
         flash("Username already exists!")
         return redirect(url_for("auth.signup"))
-    if not code:
-        flash("Wrong code")
-        return redirect(url_for("auth.signup"))
-    
+
+    # The storage limit the user is giving    
     storagelimit = 5368709120 #5 GB in bytes
     date_of_creation = datetime.datetime.now()
 
@@ -82,7 +77,6 @@ def signup_post():
     
 
     db.session.add(new_user)
-    db.session.delete(code)
     db.session.commit()
     login_user(new_user)
 

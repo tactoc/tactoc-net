@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 from flask import Flask,Markup,Blueprint, render_template, session, current_app, send_file ,send_from_directory, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user, logout_user
 import os
@@ -36,26 +35,7 @@ def profile():
     storagelimit        = Cloud().parse_bytes(current_user.storagelimit)
     return render_template("/main/profile.html", name=username, email=email, storagelimit=storagelimit, storageused=storageused)
 
-@main.route("/contact", methods=["GET", "POST"])
-def contact():
-    user = current_user
-    
-    if request.method == "POST":
-        data = request.form
-        usernameInput   = data["usernameInput"]
-        emailInput      = data["emailInput"]
-        titleInput      = data["titleInput"]
-        subjectInput    = data["subjectInput"]
-        if "" in [usernameInput,emailInput,titleInput,subjectInput]:
-            flash("Please fill out all of the fields")
-            return render_template("contact.html", user=user)
-        
-        new_mail = Mails(email=emailInput, username=usernameInput, title=titleInput, subject=subjectInput)
-        
-        db.session.add(new_mail)
-        db.session.commit()
-        flash("Your message has been sent!")
-    return render_template("/main/contact.html", user=user)
+
 
 class Uploads(object):
     def __init__(self):
