@@ -22,9 +22,11 @@ The server uses a sqlite3 database with a users table with the columns:
 - storagelimit
 - date_of_creation
 - permission_level
+<br>
 All users start with 5 gb of available storage on signup (You can ofc change this)
 The permission level has to be changed manually in the database to give the user permission to upload to the public folder.
-you can do it with this command SQL"`UPDATE users SET permission_level=1 where id={USER ID};`" 
+you can do it with this command <br>
+SQL"`UPDATE users SET permission_level=1 where id={USER ID};`" 
 
 
 Be aware it lacks comments in some places, but hope it is somewhat understandable.
