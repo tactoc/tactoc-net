@@ -72,30 +72,4 @@
 
     </div>
 
-    <script>
-        function deleteItem(i){
-            let y = document.getElementById('delete_button')
-            console.log(y)
-            y.value = i;
-            let x = confirm('Delete ' + i + " ?")
-            if (x == true){
-                y.click()
-            }
-        }
-
-        function editItem(i){
-            let y = document.getElementById('edit_button')
-            console.log(y)
-            let x = prompt('Assign a new name for ' + i)
-
-            if (!x == null || !x == ''){
-                y.value = String(i + "," + x)
-                y.click();
-            }
-        }
-
-        function fileuploaded(){
-            document.getElementById('submitfile').click()
-        }
-    </script>
 {% endblock %}
