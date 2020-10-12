@@ -3,16 +3,12 @@
 
 {% block content %}
     
-    
     <div class="wrapper">
         
         <div id="formContent">
             <form action="/cloud" method="POST">
                 <input type="submit" name="change_root" value="cloud" class="astextroot"></input>
             </form>
-          
-            
-
             <h5>{{ user_cloud.show_selected_folder() }}</h5>
             <h6  style="font-weight: bold;">{{ user_cloud.get_storage() }} / {{ user_cloud.get_storage_limit() }} </h6>
             
@@ -67,18 +63,11 @@
                                     <input type="submit" id="submitfolders" style="visibility: hidden; background: none; border: none; cursor: pointer; font-size: 0px;">
                                 </form>
                             </div>
-
                         </div>
-                        
                         <div class="clearfix"></div>
-
                     </div>
-
                 <div style="margin: 5px;" class="border"></div>
             </div>
-            
-
-
             
             <div class="files">
                 {% if user_cloud.has_files() %}
@@ -137,11 +126,8 @@
                     {% endfor %}
                 {% else %}
                     <p>There is no files in {{ user_cloud.get_folder() }}</p>
-                    
 
                 {% endif %}
-
-
     
                 {% if SELECTED_FOLDER|length > 1 %}
                     <div class="custom-file-upload">
@@ -174,7 +160,6 @@
                 </form>
             </div>
     </div>
-
     <script>
 
         function changefolder(i) {
@@ -240,9 +225,6 @@
             document.getElementById('submitfolders').click()
         }
 
-
-
-
         function deleteItem(i){
             let y = document.getElementById('delete_button')
             console.log(y)
@@ -268,10 +250,7 @@
             y.value = i;
             y.click();
             console.log(y.value);
-
-
         }
 
     </script>
-    
 {% endblock %}

@@ -3,14 +3,11 @@
 
 {% block content %}
     
-    
     <div class="wrapper">
         <div id="formContent">
             <form action="/uploads" method="POST">
                 <input type="submit" name="change_root" value="uploads" class="astextroot"></input>
             </form>
-          
-            
 
             <h5>uploads by server</h5>
             <h6  style="font-weight: bold;">{{ obj.count_files() }} Files</h6>
@@ -73,8 +70,6 @@
             <input id="edit_button" name="edit_upload" type="submit" class="hidden-submit">
         </form>
 
-
-
     </div>
 
     <script>
@@ -102,8 +97,5 @@
         function fileuploaded(){
             document.getElementById('submitfile').click()
         }
-
-
     </script>
-    
 {% endblock %}

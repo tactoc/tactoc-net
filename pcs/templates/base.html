@@ -4,8 +4,6 @@
     <title>PCS - TACTOCTICAL</title>
     <meta charset="UTF-8">
 
-
-
     <link rel="shortcut icon" type="image/png" href="/static/favicon.png"/>
 
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
@@ -21,17 +19,12 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
 
-
 </head>
 <body id="backgrounder">
     <div class="container ">
       <nav class="navbar navbar-expand navbar-dark">
           <div class="navbar-nav ">
               <a class="navbar-brand" style="color: #F25F5C;"  target="_blank" href="https://www.tactoctical.com">TACTOCTICAL</a>
-                <!--
-                <a class="nav-item nav-link active" href="{{ url_for('main.projects') }}">Projects</a>
-              -->
-              
               
               {% if current_user.is_authenticated %}
               <a class="nav-item nav-link active" href="{{ url_for('main.cloud') }}">Cloud</a>
